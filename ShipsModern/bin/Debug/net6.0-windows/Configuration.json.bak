@@ -1,0 +1,17 @@
+{
+  "TileSquare": 5,
+  "CellScale": 2,
+  "FieldWidth": 4000,
+  "FieldHeight": 4000,
+  "TimeTickMS": 50,
+  "MultiplyTimer": 2,
+  "IBWaitingMode": true,
+  "IBWaitsFraghtInSeconds": 30,
+  "DistanceBeetwenIcebreakerAndShips": 1,
+  "DistanceBeetwenShips": 1,
+  "IcebreakerImageSize": 50,
+  "ShipImageSize": 50,
+  "DefaultImageSize": 50,
+  "ConvoyShipImageSize": 25,
+  "CaravanSpeed":  10
+}

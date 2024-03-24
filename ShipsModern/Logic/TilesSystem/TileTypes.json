@@ -1,0 +1,52 @@
+[
+  {
+    "id": "0",
+    "name": "Empty Tile",
+    "symbol": " ",
+    "cost": 1,
+    "RGB": [ 137, 167, 160 ],
+    "PixelRGB": [ 137, 167, 160 ],
+    "passable": true,
+    "description": "A free section of the path, not loaded with any factors."
+  },
+  {
+    "id": "1",
+    "name": "Earth",
+    "symbol": "e",
+    "cost": 1,
+    "RGB": [ 238, 227, 199 ],
+    "PixelRGB": [ 238, 227, 199 ],
+    "passable": false,
+    "description": "Unpassable earth-tile for ship's routes'."
+  },
+  {
+    "id": "2",
+    "name": "Thick Ice",
+    "symbol": "t",
+    "cost": 20,
+    "RGB": [ 255, 255, 255 ],
+    "PixelRGB": [ 241, 246, 252 ],
+    "passable": false,
+    "description": "Ice field where transport can't routing."
+  },
+  {
+    "id": "3",
+    "name": "Ice",
+    "symbol": "i",
+    "cost": 10,
+    "RGB": [ 185, 214, 235 ],
+    "PixelRGB": [ 185, 214, 235 ],
+    "passable": false,
+    "description": "Ice field where transport can routing with icebreaker."
+  },
+  {
+    "id": "4",
+    "name": "Thin Ice",
+    "symbol": "l",
+    "cost": 5,
+    "RGB": [ 150, 180, 200 ],
+    "PixelRGB": [ 73, 143, 190 ],
+    "passable": false,
+    "description": "Thin ice field."
+  }
+]

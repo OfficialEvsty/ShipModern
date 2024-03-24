@@ -1,0 +1,40 @@
+{
+  "TileDistance": 100,
+
+  "TileWidth": 1,
+  "CellScale": 2,
+  "FieldWidth": 4000,
+  "FieldHeight": 4000,
+  "TimeTickMS": 50,
+  "MultiplyTimer": 200,
+  "IBWaitingMode": true,
+  "IBWaitsFraghtInSeconds": 30,
+  "DistanceBetweenIcebreakerAndShips": 100,
+  "DistanceBetweenShips": 1200,
+
+  "SVG_Uris": {
+    "CargoShip": "CargoShip.svg",
+    "Icebreaker": "Icebreaker.svg",
+    "Node": "Node.svg",
+    "MarineNode": "MarineNode.svg"
+  },
+  
+
+  "IcebreakerImageSize": 50,
+  "ShipImageSize": 50,
+  "DefaultImageSize": 50,
+  "ConvoyShipImageSize": 35,
+  "NodeImageSize": 30,
+  "MarineNodeImageSize": 20,
+
+  "CaravanSpeed": 10,
+
+  "IceResistance": {
+    "1": [],
+    "2": [ "Thin Ice" ],
+    "3": [ "Thin Ice", "Ice" ]
+  },
+  "ShipIceResistLevel": 2,
+  "IBIceResistLevel": 3
+
+}
