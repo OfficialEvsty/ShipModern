@@ -3,18 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:SVG="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920"
+        Title="MainWindow"
         MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp" WindowState="Maximized">
     <Grid>
+        <Grid.Resources>
+            <Style x:Key="InvisibleBorder" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="BorderThickness" Value="0"></Setter>
+            </Style>
+            <SVG:SvgViewbox x:Key="playIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/play.svg" Stretch="Uniform"></SVG:SvgViewbox>
+            <SVG:SvgViewbox x:Key="draghIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/dragh.svg" Stretch="Uniform"></SVG:SvgViewbox>
+            <SVG:SvgViewbox x:Key="plusIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/plus.svg" Stretch="Uniform"></SVG:SvgViewbox>
+            <SVG:SvgViewbox x:Key="minusIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/minus.svg" Stretch="Uniform"></SVG:SvgViewbox>
+        </Grid.Resources>
 
-        <Image Name="fieldImg" Width="1920" Height="1080" ></Image>
+        <Image Name="fieldImg" Width="1366" Height="768" ></Image>
         <Canvas Name="modelCanvas" Background="Transparent"></Canvas>
-        <StackPanel Margin="10, 10">
-            <Button Content="-" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Consolas" FontSize="36" Click="Decrease_Scale"/>
-            <Button Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Consolas" FontSize="36" Click="Increase_Scale"/>
-            <Slider Name="timeAcceleratorSlider" ></Slider>
-        </StackPanel>
+        <Border Background="White" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="White" CornerRadius="5" Margin="5">
+            <StackPanel Margin="5" MaxWidth="400" Height="25" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Button Content="{StaticResource minusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Decrease_Scale"/>
+                <Button Content="{StaticResource plusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Increase_Scale"/>
+                <Button Content="{StaticResource draghIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="PlayOrPause"/>
+            </StackPanel>
+        </Border>
     </Grid>
 
 </Window>

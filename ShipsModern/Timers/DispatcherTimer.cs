@@ -14,7 +14,8 @@ namespace ShipsForm.Timers
     {
         System.Threading.Timer m_timer;
         int i_tick;
-
+        private bool b_isRunning;
+        public bool IsRunning { get { return b_isRunning; } }
         public delegate void TickEventHandler();
         public event TickEventHandler? Tick;
         public DispatcherTimer(int tick)
@@ -22,6 +23,7 @@ namespace ShipsForm.Timers
             TimerCallback tm = new TimerCallback(Running);
             i_tick = tick;
             m_timer = new System.Threading.Timer(tm, null, 0, i_tick);
+            b_isRunning = true;
         }
 
         private void Running(object tick)
@@ -35,12 +37,14 @@ namespace ShipsForm.Timers
         public void Pause()
         {
             m_timer.Change(0, 0);
+            b_isRunning = false;
             Console.WriteLine("Таймер был остановлен.");
         }
 
         public void Resume()
         {
             m_timer.Change(0, i_tick);
+            b_isRunning = true;
             Console.WriteLine("Таймер запущен.");
         }
     }

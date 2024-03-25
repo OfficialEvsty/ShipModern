@@ -105,6 +105,7 @@ namespace ShipsForm.Timers
         public int Tick = Configuration.Instance.TimeTickMS;
 
         public static TimerData Timer = new TimerData();
+        public bool IsRunning{ get { return m_timer.IsRunning; } }
 
         
         private string s_timeFormat;

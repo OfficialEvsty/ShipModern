@@ -1,22 +1,23 @@
 {
   "version": 2,
-  "dgSpecHash": "6kEzkvuhvlLDTYBVgz0Esbu7E0XLEiQvfS6iO9BFgyNBWzo0usxiulfexvrlCiYk1UZWQ0u7godbMFAiPDuHKw==",
+  "dgSpecHash": "KlQAxnjbDW6IlFcuC/FP7irOkBaHx/bP0KVH59V78cjtHWNxg3Q/Fhjl7hO7uWWbmp26Hedkffp9hXMd0yzuKQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\wwwww\\source\\repos\\ShipsModern\\ShipsModern\\ShipsModern.csproj",
+  "projectFilePath": "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\ShipsModern.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\wwwww\\.nuget\\packages\\excss\\4.2.3\\excss.4.2.3.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\npgsql\\8.0.2\\npgsql.8.0.2.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\svg\\3.4.7\\svg.3.4.7.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\system.diagnostics.diagnosticsource\\8.0.0\\system.diagnostics.diagnosticsource.8.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\system.drawing.common\\5.0.3\\system.drawing.common.5.0.3.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
-    "C:\\Users\\wwwww\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"
+    "C:\\Users\\acer\\.nuget\\packages\\excss\\4.2.3\\excss.4.2.3.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\npgsql\\8.0.2\\npgsql.8.0.2.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\sharpvectors\\1.8.4\\sharpvectors.1.8.4.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\svg\\3.4.7\\svg.3.4.7.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.diagnostics.diagnosticsource\\8.0.0\\system.diagnostics.diagnosticsource.8.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.drawing.common\\5.0.3\\system.drawing.common.5.0.3.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

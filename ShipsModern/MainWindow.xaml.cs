@@ -20,6 +20,7 @@ using ShipsForm.Launching;
 using ShipsForm.GUI.Elements;
 using System.Runtime.InteropServices;
 using ShipsModern.SupportEntities;
+using ShipsForm.Timers;
 
 namespace ShipsModern
 {
@@ -47,8 +48,12 @@ namespace ShipsModern
             SVGData.UploadAllData();
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
+            this.Width = screenWidth;
+            this.Height = screenHeight;
             modelCanvas.Width = screenWidth;
             modelCanvas.Height = screenHeight;
+            //var bitmapSrc = (BitmapSource)fieldImg.Source;
+            //fieldImg.Source = new TransformedBitmap(bitmapSrc, new ScaleTransform(screenWidth / bitmapSrc.PixelWidth, screenHeight / bitmapSrc.PixelHeight));
             var config = Configuration.Instance;
             if (config is null)
                 throw new ConfigFileDoesntExistError();
@@ -90,6 +95,21 @@ namespace ShipsModern
         private void Increase_Scale(object sender, RoutedEventArgs e)
         {
             ScaleChanger.IncreaseScale();
+        }
+
+        private void PlayOrPause(object sender, RoutedEventArgs e)
+        {
+            var timer = TimerData.Timer;
+            if (!timer.IsRunning)
+            {
+                TimerData.Timer.TimerOn();
+                ((Button)sender).Content = Resources["draghIcon"];
+            }
+            else
+            {
+                TimerData.Timer.TimerOff();
+                ((Button)sender).Content = Resources["playIcon"];
+            }
         }
     }
 }

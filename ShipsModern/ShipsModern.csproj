@@ -8,8 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\icons\dragh.svg" />
+    <None Remove="Resources\icons\minus.svg" />
+    <None Remove="Resources\icons\play.svg" />
+    <None Remove="Resources\icons\plus.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\icons\dragh.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icons\minus.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icons\play.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icons\plus.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql" Version="8.0.2" />
+    <PackageReference Include="SharpVectors" Version="1.8.4" />
     <PackageReference Include="Svg" Version="3.4.7" />
   </ItemGroup>
 
