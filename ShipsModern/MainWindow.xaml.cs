@@ -34,6 +34,7 @@ namespace ShipsModern
         static extern bool AllocConsole();
         Launcher launcher;
         FraghtConstructor f_construct;
+        bool UIControlsAlreadyInitialized = false;
 
 
         private Painter m_painter;
@@ -42,6 +43,7 @@ namespace ShipsModern
         public MainWindow()
         {
             InitializeComponent();
+            UIControlsAlreadyInitialized = true;
             AllocConsole();
             //Strict sequence
             Configuration.Init();
@@ -64,6 +66,15 @@ namespace ShipsModern
             m_painter = new Painter(fieldImg, modelCanvas, field, config);
             Launcher launcher = new Launcher(m_painter);
             this.Background = Brushes.Transparent;
+            SetupUIControls();
+        }
+
+        private void SetupUIControls()
+        {
+            var config = Configuration.Instance;
+            if (config is null)
+                throw new ConfigFileDoesntExistError();
+            controlTimeSlider.Value = config.MultiplyTimer;
         }
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -100,16 +111,28 @@ namespace ShipsModern
         private void PlayOrPause(object sender, RoutedEventArgs e)
         {
             var timer = TimerData.Timer;
+            var res = ((Grid)Content).Resources;
             if (!timer.IsRunning)
             {
                 TimerData.Timer.TimerOn();
-                ((Button)sender).Content = Resources["draghIcon"];
+                ((Button)sender).Content = res["draghIcon"];
             }
             else
             {
                 TimerData.Timer.TimerOff();
-                ((Button)sender).Content = Resources["playIcon"];
+                ((Button)sender).Content = res["playIcon"];
             }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!UIControlsAlreadyInitialized)
+                return;
+            var config = Configuration.Instance;
+            if (config is null)
+                throw new ConfigFileDoesntExistError();
+            var multiplier = (int)e.NewValue;
+            config.MultiplyTimer = multiplier;          
         }
     }
 }

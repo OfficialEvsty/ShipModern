@@ -74,6 +74,7 @@ namespace ShipsForm.GUI
             i_shiftY = (int)(i_shiftY * correlation);
             Console.WriteLine($"Scale was changed on: {i_cellScale}");
             DrawCells();
+            DrawFrame();
         }
 
         public int TileWidth

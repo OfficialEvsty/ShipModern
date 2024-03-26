@@ -26,6 +26,7 @@
                 <Button Content="{StaticResource minusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Decrease_Scale"/>
                 <Button Content="{StaticResource plusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Increase_Scale"/>
                 <Button Content="{StaticResource draghIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="PlayOrPause"/>
+                <Slider Name="controlTimeSlider" Minimum="1" Maximum="1000" Width="200" ValueChanged="Slider_ValueChanged"></Slider>
             </StackPanel>
         </Border>
     </Grid>
