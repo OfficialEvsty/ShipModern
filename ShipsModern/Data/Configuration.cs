@@ -47,7 +47,7 @@ namespace ShipsForm.Data
         static public void Init()
         {
             string filename = "Configuration.json";
-            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), filename)))
+            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory() + @"../../../../", filename)))
             {
                 string json = reader.ReadToEnd();
                 if (json is null)

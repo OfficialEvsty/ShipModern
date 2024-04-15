@@ -12,6 +12,7 @@
     <None Remove="Resources\icons\minus.svg" />
     <None Remove="Resources\icons\play.svg" />
     <None Remove="Resources\icons\plus.svg" />
+    <None Remove="TitleIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\icons\plus.svg" />
+    <Resource Include="TitleIcon.png" />
   </ItemGroup>
 
   <ItemGroup>

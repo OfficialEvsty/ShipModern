@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:SVG="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        Title="MainWindow"
-        MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp" WindowState="Maximized">
+        Title="Arctic Ships"
+        MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp" WindowState="Maximized" Icon="/TitleIcon.png">
     <Grid>
         <Grid.Resources>
             <Style x:Key="InvisibleBorder" TargetType="Button">
@@ -19,14 +19,14 @@
             <SVG:SvgViewbox x:Key="minusIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/minus.svg" Stretch="Uniform"></SVG:SvgViewbox>
         </Grid.Resources>
 
-        <Image Name="fieldImg" Width="1366" Height="768" ></Image>
+        <Image Name="fieldImg" Width="1920" Height="1080" ></Image>
         <Canvas Name="modelCanvas" Background="Transparent"></Canvas>
         <Border Background="White" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="White" CornerRadius="5" Margin="5">
             <StackPanel Margin="5" MaxWidth="400" Height="25" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Button Content="{StaticResource minusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Decrease_Scale"/>
                 <Button Content="{StaticResource plusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Increase_Scale"/>
                 <Button Content="{StaticResource draghIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="PlayOrPause"/>
-                <Slider Name="controlTimeSlider" Minimum="1" Maximum="1000" Width="200" ValueChanged="Slider_ValueChanged"></Slider>
+                <Slider Name="controlTimeSlider" Minimum="1" Maximum="1000" Width="200" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0"></Slider>
             </StackPanel>
         </Border>
     </Grid>

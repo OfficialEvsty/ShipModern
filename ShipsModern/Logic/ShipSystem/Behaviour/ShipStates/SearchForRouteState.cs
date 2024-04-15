@@ -23,7 +23,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
             else
                 destination = sb.GetFraghtInfo().ToNode;
             sb.Navigation.SetToNode(destination);
-            sb.Navigation.InstallRoute();
+            sb.Navigation.InstallRoute((sb.Ship as CargoShip).Shell.IceResistLevel);
             if (sb.Navigation.ChosenRoute != null)
                 sb.GoNextState();
         }

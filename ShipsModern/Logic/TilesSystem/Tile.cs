@@ -8,7 +8,8 @@ namespace ShipsForm.Logic.TilesSystem
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public int Cost { get; init; }
+        public int TileCost { get; init; }
+        public int Cost { get; private set; }
         public float Distance { get; private set; }
         public float CostDistance { get { return Cost + Distance; } }
         public bool Passable { get; set; }
@@ -28,9 +29,13 @@ namespace ShipsForm.Logic.TilesSystem
         {
             var data = Data.Configuration.Instance;
             if (data is null) throw new ConfigFileDoesntExistError();
-                
-            Distance = MathF.Sqrt(MathF.Pow(targetX - X, 2) + MathF.Pow(targetY - Y, 2));
+
+            Distance = /*MathF.Max(MathF.Abs(targetX - X), MathF.Abs(targetY - Y));*/MathF.Sqrt(MathF.Pow(targetX - X, 2) + MathF.Pow(targetY - Y, 2));
         }
 
+        public void SetCost(int cost)
+        {
+            Cost = cost + TileCost;
+        }
     }
 }

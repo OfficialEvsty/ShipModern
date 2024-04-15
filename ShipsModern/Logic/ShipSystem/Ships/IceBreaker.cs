@@ -23,6 +23,7 @@ namespace ShipsForm.Logic.ShipSystem.Ships
         public EskortFraght[] Fraghts { get {  return m_fraghts; } }
         public IceBreaker(MarineNode marineNode)
         {
+            Id = Manager.GetGuiElementID();
             m_navigation = new Navigation();
             m_engine = new Engine();
             var data = Data.Configuration.Instance;

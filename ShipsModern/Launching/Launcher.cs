@@ -30,7 +30,7 @@ namespace ShipsForm.Launching
             Node node1 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.8f, 0.6f), 5);
             Node node2 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.86f, 0.7f), 8);
             Node node3 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.8f, 0.8f), 2);
-            MarineNode marineNode1 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.8f, 0.76f));
+            MarineNode marineNode1 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.8f, 0.7f));
             MarineNode marineNode2 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.56f, 0.8f));
             Dictionary<Cargo, int> requiredCargo = new Dictionary<Cargo, int>();
             requiredCargo.Add(new CargoContainer(node2), 5);

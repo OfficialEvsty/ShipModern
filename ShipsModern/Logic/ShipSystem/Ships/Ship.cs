@@ -14,6 +14,7 @@ namespace ShipsForm.Logic.ShipSystem.Ships
     {
         protected static int id_counter = 0;
         public int Id { get; protected set; }
+        public IPathDrawable PathObserver { get { return m_navigation; } }
         protected Navigation m_navigation;
         protected Engine m_engine;
 
@@ -25,5 +26,6 @@ namespace ShipsForm.Logic.ShipSystem.Ships
         public abstract SupportEntities.Point? GetCurrentPoint();
         public abstract double GetRotation();
         public abstract int GetSize();
+
     }
 }

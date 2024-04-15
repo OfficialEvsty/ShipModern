@@ -13,14 +13,11 @@ namespace ShipsForm.Logic.NodeSystem
 {
     sealed class Node : GeneralNode
     {
-        private int id;
-        private static int id_counter = 1000;
         private LoadingSection m_loadingSection;
         private List<CargoShip> m_ships = new List<CargoShip>();
         private Dictionary<Cargo, decimal> m_priceCargo = new Dictionary<Cargo, decimal>();
         private int i_maxNodeSize;
 
-        public int Id { get { return id; } }
         public LoadingSection LoadingSection { get { return m_loadingSection; } }
         public List<CargoShip> Ships { get { return m_ships; } }
 
@@ -32,7 +29,7 @@ namespace ShipsForm.Logic.NodeSystem
 
         public Node(SupportEntities.Point relatedPointToSetNode, int maxSize)
         {
-            id = ++id_counter;
+            Id = Manager.GetGuiElementID();
             m_loadingSection = new LoadingSection(this, maxSize / 3);
             m_relatedPoint = relatedPointToSetNode;
             i_maxNodeSize = maxSize;

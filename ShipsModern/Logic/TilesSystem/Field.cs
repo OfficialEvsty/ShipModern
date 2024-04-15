@@ -102,12 +102,12 @@ namespace ShipsForm.Logic.TilesSystem
                 {
                     if (parent is not null)
                     {
-                        Tile newTile = new Tile() { Cost = type.Cost, X = i, Y = j, Passable = type.Passable, Parent = parent };
+                        Tile newTile = new Tile() { TileCost = type.Cost, X = i, Y = j, Passable = type.Passable, Parent = parent };
                         return newTile;
                     }
                     else
                     {
-                        Tile newTile = new Tile() { Cost = type.Cost, X = i, Y = j, Passable = type.Passable };
+                        Tile newTile = new Tile() { TileCost = type.Cost, X = i, Y = j, Passable = type.Passable };
                         return newTile;
                     }
                 }
@@ -166,6 +166,7 @@ namespace ShipsForm.Logic.TilesSystem
             };
             possibleTiles = possibleTiles.Where(tile => tile != null).ToList();
             possibleTiles.ForEach(tile => tile.SetDistance(targetTile.X, targetTile.Y));
+            possibleTiles.ForEach(tile => tile.SetCost(currentTile.Cost));
             return possibleTiles
                 .Where(tile => tile.X >= 0 && tile.X < map.First().Length)
                 .Where(tile => tile.Y >= 0 && tile.Y < map.Count)
@@ -176,14 +177,16 @@ namespace ShipsForm.Logic.TilesSystem
         {
             List<Tile> activeTiles = new List<Tile>();
             List<Tile> visitedTiles = new List<Tile>();
+            currentTile.SetCost(0);
             currentTile.SetDistance(targetTile.X, targetTile.Y);
             activeTiles.Add(currentTile);
             while (activeTiles.Any())
             {
+                if (visitedTiles.Count % 500 == 0)
+                    Console.Write(visitedTiles.Count);
                 var checkTile = activeTiles.OrderBy(tile => tile.CostDistance).First();
                 if (checkTile.X == targetTile.X && checkTile.Y == targetTile.Y)
                 {
-                    Console.WriteLine("We are in destination!");
                     var returnedListTiles = new List<Tile>();
                     while (checkTile != null)
                     {
@@ -199,24 +202,21 @@ namespace ShipsForm.Logic.TilesSystem
                 var walkableTiles = GetWalkableTiles(map, checkTile, targetTile, iceResistLevel);
                 foreach (var walkableTile in walkableTiles)
                 {
-                    if (visitedTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y))
+                    if (visitedTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost))
                         continue;
-
-                    if (activeTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y))
-                    {
-                        var existingTile = activeTiles.First(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y);
-                        if (existingTile.CostDistance > checkTile.CostDistance)
-                        {
-                            activeTiles.Remove(existingTile);
-                            activeTiles.Add(walkableTile);
-                        }
-                    }
-                    else
-                        activeTiles.Add(walkableTile);
+                    if (!activeTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y))
+                        activeTiles.Add(walkableTile);               
                 }
             }
             Console.WriteLine($"Path from {currentTile.X} : {currentTile.Y} to {targetTile.X} : {targetTile.Y} not found.");
             return null;
+        }
+
+        public static bool IsTilesEqual(Tile t1, Tile t2)
+        {
+            if (t1 == null || t2 == null)
+                return false;
+            return t1.X == t2.X && t1.Y == t2.Y;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace ShipsForm.Logic.NodeSystem
     {
         public MarineNode(SupportEntities.Point relatedPointToSetNode)
         {
+            Id = Manager.GetGuiElementID();
             m_relatedPoint = relatedPointToSetNode;
         }
 

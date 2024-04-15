@@ -12,6 +12,7 @@ namespace ShipsForm.Logic.NodeSystem
         /// </summary>
         protected SupportEntities.Point? m_relatedPoint = null;
         protected SupportEntities.Point? m_point = null;
+        public int Id { get; protected set; }
         public Tile TileCoords
         {
             get

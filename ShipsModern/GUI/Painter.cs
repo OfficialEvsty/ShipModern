@@ -9,13 +9,35 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Linq;
 
 namespace ShipsForm.GUI
 {
+    public class UIIdentifier
+    {
+        public static readonly DependencyProperty Id =
+            DependencyProperty.RegisterAttached("Id", typeof(int), typeof(UIIdentifier), new PropertyMetadata(default(int)));
+
+        public static void SetId(UIElement element, int id)
+        {
+            element.SetValue(Id, id);
+        }
+
+        public static int GetId(UIElement element)
+        {
+            return (int)element.GetValue(Id);
+        }
+    }
+
+
     public class Painter
     {
         private WriteableBitmap m_wBitmap;
         private Canvas m_canvas;
+
+        private int[] i_activeUIIndexes;
+
         private int i_lineWidth = 1;
 
         private static int i_shiftX = 0;
@@ -28,18 +50,83 @@ namespace ShipsForm.GUI
 
         private Size m_primScreenSize = new Size(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
 
-        private List<IDrawable> m_models = Manager.Drawings;
+        private Dictionary<int, IDrawable> m_models = Manager.Drawings;
+
+        private Dictionary<int, IPathDrawable> m_paths = Manager.Paths;
+
+        private bool IsUIElementOnCanvas(int id)
+        {
+            foreach (UIElement ui in m_canvas.Children)
+            {
+                if (UIIdentifier.GetId(ui) == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private UIElement GetUIElement(int id) 
+        {
+            foreach (UIElement ui in m_canvas.Children)
+            {
+                if(UIIdentifier.GetId(ui) == id)
+                {
+                    return ui;
+                }
+                    
+            }
+            throw new Exception("UIElement with directed ID doesn't exist in this scope.");
+        }
+        private void AddUI(int id, bool isModel = true)
+        {
+            UIElement CreateUiModel(int id)
+            {
+                var model = m_models[id];
+
+                ImageSource skin = model.GetSkin(model.GetSize());
+
+                Image img = new Image();
+                img.Source = skin;
+                return img;
+            }
+
+            UIElement CreateUiShipPath(int id)
+            {
+                Polyline p = new Polyline();
+                return p;
+            }
+
+            if (isModel)
+            {
+
+                var ui = CreateUiModel(id);
+                UIIdentifier.SetId(ui, id);
+                m_canvas.Children.Add(ui);
+            }
+            else
+            {
+                var ui = CreateUiShipPath(id);
+                UIIdentifier.SetId(ui, id);
+                m_canvas.Children.Insert(0, ui);
+            }
+        }
+        private void RemoveUI(int id)
+        {
+            m_canvas.Children.Remove(GetUIElement(id));
+                     
+        }
+
 
         public Size Size { get { return m_primScreenSize; } }
 
-        public Painter(Image img, Canvas cvas, Field field, Configuration? sett = null)
+        public Painter(Image img, Canvas modelCvas, Field field, Configuration? sett = null)
         {
-
             RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
             RenderOptions.SetEdgeMode(img, EdgeMode.Aliased);
             m_wBitmap = new WriteableBitmap((int)m_primScreenSize.Width, (int)m_primScreenSize.Height, 300, 300, PixelFormats.Rgb24, null);
             img.Source = m_wBitmap;
-            m_canvas = cvas;
+            m_canvas = modelCvas;
             m_field = field;
             
             if (m_field.Types is null)
@@ -56,6 +143,7 @@ namespace ShipsForm.GUI
             }
             ScaleChanger.Scale = CellScale;
             ScaleChanger.OnChangeScale += ChangeScale;
+
             DrawCells();
         }
 
@@ -75,6 +163,7 @@ namespace ShipsForm.GUI
             Console.WriteLine($"Scale was changed on: {i_cellScale}");
             DrawCells();
             DrawFrame();
+            //DrawShipPaths();
         }
 
         public int TileWidth
@@ -138,75 +227,124 @@ namespace ShipsForm.GUI
                            
         }
 
-        private void ClearMap()
+        /// <summary>
+        /// Removes inactive uielements from canvas.
+        /// </summary>
+        /// <param name="ids"></param>
+        private void ClearUIs(int[] ids)
         {
             if (Application.Current is null)
                 return;
+
             Application.Current.Dispatcher.Invoke(() =>
             {
-                m_canvas.Children.Clear();
+                int[] checkedIds = ids.Where(id => m_canvas.Children.OfType<UIElement>().Select(x => UIIdentifier.GetId(x)).ToArray()
+.Any(x => x == id)).ToArray();
+                foreach (int id in checkedIds)
+                {
+                    RemoveUI(id);
+                }
             });
+        }
+        /// <summary>
+        /// Checks inactive IDrawable and removes them.
+        /// </summary>
+        private void ControlActiveUIElements()
+        {
+        int[] inactiveIDs;
+            inactiveIDs = m_models.ToDictionary(entry => entry.Key, entry => entry.Value)
+            .Where(x => x.Value.GetCurrentPoint() == null)
+            .Select(x => x.Key)
+            .Concat(m_paths.ToDictionary(entry => entry.Key, entry => entry.Value)
+            .Where(x => !x.Value.IsPath())
+            .Select(x => x.Key))
+            .ToArray();
+
+            
+
+            ClearUIs(inactiveIDs);
+            i_activeUIIndexes = m_models.Where(x => !inactiveIDs.Any(y => y == x.Key)).Select(x => x.Key).Concat(m_paths.Where(x => !inactiveIDs.Any(y => y == x.Key)).Select(x => x.Key)).ToArray();
         }
 
         private void DrawModels()
         {
-            /*Image models_area = (Image)m_cells_bitmap.Clone();
-            Graphics g = Graphics.FromImage(models_area);
-
-            */
-            foreach(IDrawable model in m_models)
+            // || m_canvasElementsDict.Any(y => y.Key == x && y.Value.RenderSize.Height == )
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Application.Current is null)
-                    break;
-                SupportEntities.Point? currentPoint = model.GetCurrentPoint();
-                if (currentPoint == null)
-                    continue;
-                Application.Current.Dispatcher.Invoke(() => 
-                {                  
-                    ImageSource skin = model.GetSkin(model.GetSize());
+                int[] modelIds = i_activeUIIndexes.Where(x => m_models.Any(y => y.Key == x)).ToArray();
+                int[] uiIdsOnCanvas = m_canvas.Children.OfType<UIElement>().Select(x => UIIdentifier.GetId(x)).ToArray();
+                int[] unshownIds = modelIds
+                    .Where(x => !uiIdsOnCanvas.Any(y => y == x)).ToArray();
+
+
+
+                int[] resizedIds = modelIds.Where(x => uiIdsOnCanvas
+                .Any(y => y == x && ((Image)GetUIElement(y)).Height != m_models[x].GetSize())).ToArray();
+                foreach (int id in unshownIds)
+                {
+                    if(IsUIElementOnCanvas(id)) { continue; }
+                    AddUI(id, isModel: true);
+                }
+
+                foreach (int id in resizedIds)
+                {
+                    if (IsUIElementOnCanvas(id)) { continue; }
+                    AddUI(id, isModel: true);
+                }
+
+                foreach (int id in modelIds)
+                {
+                    var model = m_models[id];
+                    var ui = GetUIElement(id);
+
+
+                    SupportEntities.Point? currentPoint = model.GetCurrentPoint();
+
+                    if (currentPoint == null)
+                        continue;
                     double rotation = model.GetRotation();
-
-                    Image img = new Image();
-                    img.Source = skin;
-
-
-                    Size modelSize = new Size(img.Source.Width, img.Source.Height);
+                    Size modelSize = new Size(ui.RenderSize.Width, ui.RenderSize.Height);
                     int modifier = (int)(TileWidth * CellScale);
                     int padding = (int)(TileWidth * CellScale / 2);
                     int centerX = (int)(modelSize.Width / 2);
                     int centerY = (int)(modelSize.Height / 2);
                     int pX = padding - centerX;
                     int pY = padding - centerY;
-                    RotateImage(img, rotation, new Point(centerX, centerY));
+                    RotateImage((Image)ui, rotation, new Point(centerX, centerY));
                     Point positionToDrawAModel = new Point((int)(currentPoint.X) * modifier + pX + i_shiftX, (int)(currentPoint.Y) * modifier + pY + i_shiftY);
-                    m_canvas.Children.Add(img);
-                    Canvas.SetLeft(img, positionToDrawAModel.X);
-                    Canvas.SetTop(img, positionToDrawAModel.Y);
-                });
+                    Canvas.SetLeft(ui, positionToDrawAModel.X);
+                    Canvas.SetTop(ui, positionToDrawAModel.Y);
+                }
+            });
                 
-            }
-            /*
-            foreach (IDrawable model in m_models)
+        }
+
+        public void DrawShipPaths()
+        {
+            int[] activePaths = i_activeUIIndexes.Where(x => m_paths.Any(y => y.Key == x)).ToArray();
+            foreach(int id in activePaths)
             {
-                SupportEntities.Point? currentPoint = model.GetCurrentPoint();
-                if (currentPoint == null)
-                    continue;
-                Image skin = model.GetSkin();
-                double rotation = model.GetRotation();
-
-                Size modelSize = new Size(model.GetSize(), model.GetSize());
-                int modifier = (int)(TileWidth * CellScale);
-                int padding = (int)(TileWidth * CellScale / 2);
-                int pX = padding - modelSize.Width / 2;
-                int pY = padding - modelSize.Height / 2;
-                Point positionToDrawAShip = new Point((int)(currentPoint.X) * modifier + pX + i_shiftX, (int)(currentPoint.Y) * modifier + pY + i_shiftY);
-                Image sizedImg = ChangeSizeImage(skin, modelSize);
-                Image rotatedImg = RotateImage(sizedImg, rotation);
-
-                
-                g.DrawImage(rotatedImg, positionToDrawAShip);
+                Polyline pathLine;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var observer = m_paths[id];
+                    if (!observer.IsPath()) { return; }
+                    if (!IsUIElementOnCanvas(id)) { AddUI(id, isModel: false); }                    
+                    pathLine = (Polyline)GetUIElement(id);
+                    var points = observer.GetPoints();
+                    var scaledPoints = new Point[points.Length];
+                    for (int i = 0; i < points.Length; i++)
+                        scaledPoints[i] = new Point((int)(points[i].X * CellScale + i_shiftX), (int)(points[i].Y * CellScale + i_shiftY));
+                    PointCollection pc = new PointCollection(scaledPoints);
+                    pathLine.Points = pc;
+                    pathLine.StrokeThickness = 2;
+                    pathLine.Stroke = Brushes.DarkGoldenrod;
+                    Canvas.SetLeft(pathLine, 0);
+                    Canvas.SetTop(pathLine, 0);
+                        
+                });
+                   
             }
-            this.Image = models_area;*/
         }
 
         public void OnShift(int stX, int stY)
@@ -250,8 +388,9 @@ namespace ShipsForm.GUI
 
         public void DrawFrame()
         {
-            ClearMap();
+            ControlActiveUIElements();
             DrawModels();
+            DrawShipPaths();
         }
     }
 }

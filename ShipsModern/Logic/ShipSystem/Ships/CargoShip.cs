@@ -29,8 +29,7 @@ namespace ShipsForm.Logic.ShipSystem.Ships
         public CargoShipBehavior Behavior { get { return m_behavior; } }
         public CargoShip(Node nodeToSpawnShip)
         {
-            id_counter += 1;
-            Id = id_counter;
+            Id = Manager.GetGuiElementID();
             var data = Data.Configuration.Instance;
             if (data is null)
                 throw new ConfigFileDoesntExistError();

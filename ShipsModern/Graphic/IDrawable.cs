@@ -2,6 +2,7 @@
 using ShipsForm.Logic.TilesSystem;
 using ShipsModern.SupportEntities;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -28,5 +29,11 @@ namespace ShipsForm.Graphic
         public SupportEntities.Point? GetCurrentPoint();
         public double GetRotation();
         public virtual int GetSize() { return Data.Configuration.Instance.DefaultImageSize; }
+    }
+
+    public interface IPathDrawable
+    {
+        public bool IsPath();
+        public Point[] GetPoints();
     }
 }
