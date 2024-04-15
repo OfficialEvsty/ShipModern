@@ -1,27 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\wwwww\\source\\repos\\ShipModernWPF\\ShipsModern\\ShipsModern.csproj": {}
+    "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\ShipsModern.csproj": {}
   },
   "projects": {
-    "C:\\Users\\wwwww\\source\\repos\\ShipModernWPF\\ShipsModern\\ShipsModern.csproj": {
+    "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\ShipsModern.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\wwwww\\source\\repos\\ShipModernWPF\\ShipsModern\\ShipsModern.csproj",
+        "projectUniqueName": "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\ShipsModern.csproj",
         "projectName": "ShipsModern",
-        "projectPath": "C:\\Users\\wwwww\\source\\repos\\ShipModernWPF\\ShipsModern\\ShipsModern.csproj",
-        "packagesPath": "C:\\Users\\wwwww\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\wwwww\\source\\repos\\ShipModernWPF\\ShipsModern\\obj\\",
+        "projectPath": "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\ShipsModern.csproj",
+        "packagesPath": "C:\\Users\\acer\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\acer\\Documents\\ShipModern\\ShipsModern\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\MESCIUS\\ComponentOne\\WinForms\\bin\\v8\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\wwwww\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ComponentOne.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0-windows"
+          "net6.0-windows7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files (x86)\\MESCIUS\\ComponentOne\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -63,8 +68,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -76,7 +80,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -19,7 +19,7 @@
             <SVG:SvgViewbox x:Key="minusIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/minus.svg" Stretch="Uniform"></SVG:SvgViewbox>
         </Grid.Resources>
 
-        <Image Name="fieldImg" Width="1920" Height="1080" ></Image>
+        <Image Name="fieldImg" Width="1366" Height="768" ></Image>
         <Canvas Name="modelCanvas" Background="Transparent"></Canvas>
         <Border Background="White" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="White" CornerRadius="5" Margin="5">
             <StackPanel Margin="5" MaxWidth="400" Height="25" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">

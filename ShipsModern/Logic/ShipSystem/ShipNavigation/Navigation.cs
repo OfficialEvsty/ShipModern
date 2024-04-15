@@ -17,12 +17,12 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
     {
         public void ChooseRoute(GeneralNode gn, byte iceR);
     }
-    class Navigation : IEventObserver<Route>, INavigationController, IPathDrawable
+    class Navigation : INavigationController, IPathDrawable
     {
-        private List<Route> m_availableRoutes = new List<Route>();
+        private static List<Route> m_availableRoutes = new List<Route>();
         private List<string>? m_map;
         private float f_distanceTraveledOnCurrentTile;
-        public List<Route> AvailableEdgesList { get { return m_availableRoutes; } }
+        public List<Route> AvailableRoutes { get { return m_availableRoutes; } }
         public Route ChosenRoute { get; private set; }
         public Tile CurrentTile { get; private set; }
         public double CurrentRotation { get; private set; }
@@ -45,7 +45,6 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         public Navigation()
         {
             PaintMap();
-            EventObservable.AddEventObserver(this);
         }
 
         private void SetCurrentNode()
@@ -182,7 +181,8 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         {
             if (FromNode == null || ToNode == null)
                 return false;
-            Route newRoute = new Route(FromNode, ToNode, m_map, iceResistLevel);            
+            Route newRoute = new Route(FromNode, ToNode, m_map, iceResistLevel);
+            AddRoute(newRoute);
             return true;
         }
 
@@ -219,11 +219,6 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
                 points[i++] = new Point(tile.X * data.TileWidth + data.TileWidth, tile.Y * data.TileWidth + data.TileWidth);
             }
             return points;
-        }
-
-        public void Update(Route ev)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -175,18 +176,34 @@ namespace ShipsForm.Logic.TilesSystem
 
         public static List<Tile>? BuildPath(List<string> map, Tile currentTile, Tile targetTile, byte iceResistLevel = 1)
         {
+            Dictionary<(int, int), List<Tile>> visitedTiles = new Dictionary<(int, int), List<Tile>>();
+            void AddVisitedTile(Tile tile)
+            {
+                var coordsKey = (tile.X, tile.Y);
+                if (visitedTiles.ContainsKey(coordsKey))
+                    visitedTiles[coordsKey].Add(tile);
+                else
+                    visitedTiles[coordsKey] = new List<Tile>() { tile };
+            }
+            List<Tile> GetTilesByCoordsKey((int x, int y) coordsKey)
+            {
+                if (visitedTiles.ContainsKey(coordsKey))
+                    return visitedTiles[coordsKey];
+                return new List<Tile>();
+            }
             List<Tile> activeTiles = new List<Tile>();
-            List<Tile> visitedTiles = new List<Tile>();
+            
             currentTile.SetCost(0);
             currentTile.SetDistance(targetTile.X, targetTile.Y);
             activeTiles.Add(currentTile);
+            Stopwatch[] timers = new Stopwatch[]{new Stopwatch(), new Stopwatch(), new Stopwatch()};
+
             while (activeTiles.Any())
             {
-                if (visitedTiles.Count % 500 == 0)
-                    Console.Write(visitedTiles.Count);
                 var checkTile = activeTiles.OrderBy(tile => tile.CostDistance).First();
                 if (checkTile.X == targetTile.X && checkTile.Y == targetTile.Y)
-                {
+                {                    
+                    Console.WriteLine($"Время работы а*: 1-ый таймер: {timers[0].ElapsedMilliseconds} ms, 2-ой таймер: {timers[1].ElapsedMilliseconds} ms, 3-ий таймер: {timers[2].ElapsedMilliseconds} ms");
                     var returnedListTiles = new List<Tile>();
                     while (checkTile != null)
                     {
@@ -197,14 +214,21 @@ namespace ShipsForm.Logic.TilesSystem
                     return returnedListTiles;
                 }
 
-                visitedTiles.Add(checkTile);
+                AddVisitedTile(checkTile);
                 activeTiles.Remove(checkTile);
                 var walkableTiles = GetWalkableTiles(map, checkTile, targetTile, iceResistLevel);
                 foreach (var walkableTile in walkableTiles)
                 {
-                    if (visitedTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost))
+                    timers[0].Start();
+                    var tilesSection = GetTilesByCoordsKey((walkableTile.X, walkableTile.Y));
+                    var isBetterTile = tilesSection.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost);
+                    timers[0].Stop();
+                    if (isBetterTile)
                         continue;
-                    if (!activeTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y))
+                    timers[1].Start();
+                    var isActiveTile = activeTiles.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y);
+                    timers[1].Stop();
+                    if (!isActiveTile)
                         activeTiles.Add(walkableTile);               
                 }
             }
