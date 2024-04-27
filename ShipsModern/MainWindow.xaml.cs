@@ -65,6 +65,7 @@ namespace ShipsModern
                 throw new Exception();
             m_painter = new Painter(fieldImg, modelCanvas, field, config);
             Launcher launcher = new Launcher(m_painter);
+            DataContext = TimerData.Timer;
             this.Background = Brushes.Transparent;
             SetupUIControls();
         }

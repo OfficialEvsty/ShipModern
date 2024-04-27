@@ -5,6 +5,7 @@ using ShipsForm.Logic.ShipSystem.ShipEngine;
 using ShipsForm.Logic.ShipSystem.ShipNavigation;
 using ShipsForm.Logic.ShipSystem.Ships;
 using System;
+using System.Linq;
 
 namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
 {
@@ -43,6 +44,10 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             {
                 m_convoy = con;
             }
+            public bool IsLastShipInConvoyEndRoute()
+            {
+                return !m_navs.Any(x => x.IsOnRoute());
+            }
             public void SetConvoyRoute(GeneralNode gn, byte iceResistLevel = 1)
             {
                 foreach (var nav in m_navs)
@@ -78,7 +83,8 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
                         throw new Exception("Config file doesn't exist in context.");
                     int tick = data.TimeTickMS;
                     int timeToPerform = (int)(interval / avgSpeed * tick);
-                    m_convoy.m_shipBehaviors[index].Ship.Performer.AddPerformance(new Timers.Time(timeToPerform), ControlPassed, index);
+                    var shipBehavior = m_convoy.m_shipBehaviors[index];
+                    shipBehavior.Ship.Performer.AddPerformance(new Timers.Time(timeToPerform), ControlPassed, index);
                 }
             }
             public void EndEskorting(IEngineController control)
@@ -102,36 +108,35 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             Controller = new ConvoyController(this);
         }
 
-        private int AddShip(CargoShipBehavior behavior) 
+        private int AddShip(CargoShipBehavior behavior)
         {
             int id = behavior.Ship.Id;
-            for (int i = 0; i < m_shipBehaviors.Length; i++)
-                if (m_shipBehaviors[i] == null)
-                {
-                    m_shipBehaviors[i] = behavior;
-                    return id;
-                }
+            int index = Array.IndexOf(m_shipBehaviors, null);
+            if (index != -1)
+            {
+                m_shipBehaviors[index] = behavior;
+                return id;
+            }
             throw new Exception("Can't add ship in Icebreaker's convoy.");
         }
-        private bool RemoveShip(CargoShipBehavior behavior) 
+
+        private bool RemoveShip(CargoShipBehavior behavior)
         {
             Controller.EndEskorting(behavior.Engine);
-            for(int i = 0; i < m_shipBehaviors.Length; i++)
-                if(m_shipBehaviors[i] == behavior)
-                {
-                    m_shipBehaviors[i] = null;
-                    return true;
-                }
+            int index = Array.IndexOf(m_shipBehaviors, behavior);
+            if (index != -1)
+            {
+                m_shipBehaviors[index] = null;
+                return true;
+            }
             return false;
         }
 
         public int[] EstablishConvoy(EskortFraght[] fraghts)
         {
             int[] shipIDs = new int[fraghts.Length];
-            for(int i = 0; i < fraghts.Length; i++)
+            for (int i = 0; i < fraghts.Length && fraghts[i] != null; i++)
             {
-                if (fraghts[i] == null)
-                    break;
                 var csb = fraghts[i].GetOrder() as CargoShipBehavior;
                 shipIDs[i] = AddShip(csb);
             }
@@ -139,18 +144,26 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             return shipIDs;
         }
 
-
-        public int EndConvoy(EskortFraght fraght)
+        public int ReleaseShip(EskortFraght fraght)
         {
             if (fraght.GetOrder() is CargoShipBehavior csb)
             {
                 var res = RemoveShip(csb);
                 if (res)
+                {
+                    Console.WriteLine($"Ship-[id: {csb.Ship.Id}] leaves icebreaker-[id: {fraght.Fraghter.Id}] convoy.");
+                    csb.LeaveConvoy();
                     return csb.Ship.Id;
+                }                    
                 else
                     throw new Exception($"This ship-[id: {csb.Ship.Id}] isn't member of convoy.");
             }
             throw new Exception($"This fraght-[id: {fraght.Id}] couldn't be completed.");
+        }
+
+        public void EndConvoy()
+        {
+            
             
         }
         public void FreeConvoy() { m_shipBehaviors = new CargoShipBehavior[i_maxConvoySize]; IsEskorting = false; }

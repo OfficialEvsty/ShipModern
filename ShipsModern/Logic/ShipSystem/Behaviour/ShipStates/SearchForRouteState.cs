@@ -2,6 +2,7 @@
 
 using ShipsForm.Logic.NodeSystem;
 using ShipsForm.Logic.ShipSystem.Ships;
+using ShipsModern.Logic.ShipSystem.ShipNavigation;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
 {
@@ -16,13 +17,13 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
         public override void OnEntry(ShipBehavior sb)
         {
             //Need some rules
-            IsEskort = true;
-            GeneralNode destination;
-            if (IsEskort)
-                destination = NetworkNodes.Network.GetNearMarineNode(sb.Navigation.FromNode);
-            else
-                destination = sb.GetFraghtInfo().ToNode;
-            sb.Navigation.SetToNode(destination);
+            var mainRoute = Route.GetMainRoute(sb.Navigation.FromNode, (Node)sb.GetFraghtInfo().ToNode, sb.Navigation.AvailableRoutes);
+            var destinationNode = Route.GetReachedNode(sb.Navigation.FromNode, (Node)sb.GetFraghtInfo().ToNode, (sb.Ship as CargoShip).Shell.IceResistLevel);
+            if (destinationNode is null) { throw new System.Exception(); }
+            if (destinationNode is MarineNode)
+                IsEskort = true;
+
+            sb.Navigation.SetToNode(destinationNode);
             sb.Navigation.InstallRoute((sb.Ship as CargoShip).Shell.IceResistLevel);
             if (sb.Navigation.ChosenRoute != null)
                 sb.GoNextState();
@@ -32,6 +33,8 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
         {
             if (sb.Navigation.FromNode is Node fromNode && fromNode != null)
                 fromNode.ShipLeaveNode(sb.Ship as CargoShip);
+            else if (sb.Navigation.FromNode is MarineNode fromMNode && fromMNode != null)
+                fromMNode.ShipLeaveMarineNode(sb.Ship as CargoShip);
         }
     }
 }

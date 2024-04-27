@@ -5,10 +5,14 @@ using ShipsForm.Graphic;
 using ShipsForm.GUI;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
+using ShipsForm.SupportEntities.PatternObserver.Observers;
+using ShipsForm.SupportEntities.PatternObserver;
+using System;
 
 namespace ShipsForm.Logic
 {
-    internal class Manager
+    class Manager : IEventObserver<IDrawable>
     {
         private static int i_guiCounter = 0;
         private List<Ship> m_ships = new List<Ship>();
@@ -25,6 +29,7 @@ namespace ShipsForm.Logic
         {
             m_painter = p;
             TimerData.PropertyChanged += ProccedShipsLogic;
+            EventObservable.AddEventObserver(this);
         }
 
         public static Manager Init(Painter p)
@@ -55,7 +60,7 @@ namespace ShipsForm.Logic
             get { return m_nodes; }
         }
 
-        public void AssignShip(Ship newShip)
+        private void AssignShip(Ship newShip)
         {
             var ship_id = newShip.Id;
             var pathLineId = GetGuiElementID();
@@ -64,13 +69,19 @@ namespace ShipsForm.Logic
             pathDrawables.Add(pathLineId, newShip.PathObserver);
         }
 
-        public void AssignNode(GeneralNode newNode)
+        private void AssignNode(GeneralNode newNode)
         {
             m_nodes.Add(newNode);
             drawables.Add(newNode.Id, newNode);
+            MarineNode[] marineNodes = m_nodes.Where(x => x is MarineNode).OfType<MarineNode>().ToArray();
+            if (marineNodes.Length > 0 && marineNodes.Length % 2 == 0)
+            {
+                var mn = marineNodes[new Random().Next(0, marineNodes.Length - 1)];
+                IceBreaker newIb = new IceBreaker(mn);
+            }                
         }
 
-        public void ProccedShipsLogic()
+        public void ProccedShipsLogic(object sender, PropertyChangedEventArgs args)
         {
             var safeCopied = m_ships.ToList();
             foreach (Ship ship in safeCopied)
@@ -79,6 +90,14 @@ namespace ShipsForm.Logic
                 ship.Update();
             }
             m_painter.DrawFrame();
+        }
+
+        public void Update(IDrawable ev)
+        {
+            if (ev is Ship)
+                AssignShip((Ship)ev);
+            else if (ev is GeneralNode)
+                AssignNode((GeneralNode)ev);
         }
     }
 }

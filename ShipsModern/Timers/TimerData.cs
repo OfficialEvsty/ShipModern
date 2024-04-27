@@ -1,5 +1,7 @@
 ﻿using ShipsForm.Data;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ShipsForm.Timers
 {
@@ -101,37 +103,42 @@ namespace ShipsForm.Timers
         private Time m_time;
         private DispatcherTimer m_timer;
 
-        private int i_multipleTimer = Configuration.Instance.MultiplyTimer;
         public int Tick = Configuration.Instance.TimeTickMS;
 
         public static TimerData Timer = new TimerData();
         public bool IsRunning{ get { return m_timer.IsRunning; } }
 
         
-        private string s_timeFormat;
+        private string s_timeFormat = string.Format("00:00:00");
 
         public Time Time { get { return m_time; } }
         public string TimeFormat
         {
             get { return s_timeFormat; }
-            set { s_timeFormat = value; }
+            private set { s_timeFormat = value;}
         }
-        public delegate void PropertyChangedEventHandler();
+        //public delegate void PropertyChangedEventHandler();
 
         public static event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
 
 
         public TimerData()
         {
             m_time = new Time(0, 0, 0, 9);
-            TimeFormat = "Время 09:00 AM";
             m_timer = new DispatcherTimer(Tick);
             m_timer.Tick += TimerTick;
         }
 
         public void TimerTick()
         {
-            m_time.MSeconds += Tick * i_multipleTimer;
+            m_time.MSeconds += Tick * Configuration.Instance.MultiplyTimer;
             
             OnPropertyChanged();
             UpdateTimeFormat();
@@ -149,13 +156,13 @@ namespace ShipsForm.Timers
 
         private void UpdateTimeFormat()
         {
-            TimeFormat = string.Format("Время {0:00}:{1:00} AM", Time.Hours, Time.Minutes);
+            TimeFormat = string.Format("{0:00}:{1:00}:{2:00}", Time.Hours, Time.Minutes, Time.Seconds);
             Console.WriteLine(TimeFormat);
         }
 
         public void OnPropertyChanged()
         {
-            PropertyChanged?.Invoke();
+            NotifyPropertyChanged("TimeFormat");
         }
     }
 }

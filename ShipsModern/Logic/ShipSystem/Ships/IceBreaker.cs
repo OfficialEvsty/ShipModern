@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ShipsModern.SupportEntities;
 using ShipsForm.Graphic;
+using ShipsForm.SupportEntities.PatternObserver;
 
 namespace ShipsForm.Logic.ShipSystem.Ships
 {
@@ -34,6 +35,7 @@ namespace ShipsForm.Logic.ShipSystem.Ships
             m_fraghts = new EskortFraght[4];
             m_behavior = new IBBehavior(this, m_navigation, m_engine, m_shell, m_convoy, m_fraghts);
             m_navigation.FromNode = marineNode;
+            EventObservable.NotifyObservers((IDrawable)this);
         }
 
         public Convoy? Convoy { get { return m_convoy; } }

@@ -1,5 +1,7 @@
 {
-  "TileDistance": 100,
+  "TileDistance": 16036,
+  "TileCategories": [ "free", "earth", "ice" ],
+
 
   "TileWidth": 1,
   "CellScale": 2,
@@ -9,8 +11,9 @@
   "MultiplyTimer": 200,
   "IBWaitingMode": true,
   "IBWaitsFraghtInSeconds": 30,
-  "DistanceBetweenIcebreakerAndShips": 100,
+  "DistanceBetweenIcebreakerAndShips": 1000,
   "DistanceBetweenShips": 1200,
+  "MaxTilesToPlaceMarineNode": 200,
 
   "SVG_Uris": {
     "CargoShip": "CargoShip.svg",
@@ -31,8 +34,8 @@
 
   "IceResistance": {
     "1": [],
-    "2": [ "Thin Ice" ],
-    "3": [ "Thin Ice"]
+    "2": [],
+    "3": [ "Thin Ice", "Ice", "Thick Ice" ]
   },
   "ShipIceResistLevel": 2,
   "IBIceResistLevel": 3

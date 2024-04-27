@@ -8,22 +8,23 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
     {
         public override State NextState()
         {
-            throw new NotImplementedException();
+            return new LookingForAnyShipWantsToJoinConvoy();
         }
 
         public override void OnEntry(ShipBehavior sb)
         {
             sb.Engine.ChangeSpeed(sb.Engine.CaravanSpeedInKM);
             sb.Engine.StartEngine();
-            sb.Navigation.OnEndRoute += sb.GoNextState;
             sb.Navigation.OnEndRoute += sb.Engine.StopEngine;
             if (sb is IBBehavior ibb)
+            {
                 ibb.Convoy.Controller.StartEskorting();
+            }
+                
         }
 
         public override void OnExit(ShipBehavior sb)
         {
-            sb.Navigation.OnEndRoute -= sb.GoNextState;
             sb.Navigation.OnEndRoute -= sb.Engine.StopEngine;
         }
     }

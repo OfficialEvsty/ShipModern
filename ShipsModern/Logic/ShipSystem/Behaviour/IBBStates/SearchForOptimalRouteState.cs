@@ -16,7 +16,8 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
         {
             if(sb is IBBehavior ibb)
             {
-                MarineNode mn = NetworkNodes.Network.GetNearMarineNode(ibb.GetFraghts()[0].ToNode, ibb.GetFraghts()[0].FromNode);
+                ibb.GetFraghtInfo();
+                MarineNode mn = NetworkNodes.Network.Host.GetNearMarineNode(ibb.CurrentActiveFraght.ToNode, ibb.CurrentActiveFraght.FromNode);
                 ibb.Navigation.ChooseRoute(mn, ibb.Shell.IceResistLevel);
                 if (ibb.Navigation.ChosenRoute != null)
                 {

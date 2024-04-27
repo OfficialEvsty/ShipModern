@@ -1,6 +1,8 @@
 ﻿
+using ShipsForm.Logic.FraghtSystem;
 using ShipsForm.Logic.ShipSystem.Behaviour.ShipStates;
 using System;
+using System.Linq;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
 {
@@ -13,6 +15,8 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
 
         public override void OnEntry(ShipBehavior sb)
         {
+            if (sb is IBBehavior ibb)
+                FraghtMarket.Fraghts.ToList().ForEach(fraght => ibb.Update(fraght));
             Console.WriteLine($"IceBreaker-[id: {sb.Ship.Id}] awaits additionally fraghts to appear.");
         }
 

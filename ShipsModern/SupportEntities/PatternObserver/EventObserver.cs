@@ -1,6 +1,7 @@
 ﻿using ShipsForm.SupportEntities.PatternObserver.Observers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipsForm.SupportEntities.PatternObserver
 {
@@ -21,7 +22,7 @@ namespace ShipsForm.SupportEntities.PatternObserver
         {
             List<IEventObservableBase> subscribers = new List<IEventObservableBase>();
             if (m_subscribers.ContainsKey(typeof(Event)))
-                subscribers = m_subscribers[typeof(Event)];
+                subscribers = m_subscribers[typeof(Event)].ToList();
             foreach (var subscriber in subscribers)
             {
                 ((IEventObserver<Event>)subscriber).Update(ev);

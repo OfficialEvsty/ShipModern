@@ -10,10 +10,10 @@ namespace ShipsForm.GUI.Elements
     {
         private static Size m_screenSize = new Size(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
         private static float i_max_scale = 10f;
-        private static float i_min_scale = 
-            (m_screenSize.Width > m_screenSize.Height)
+        private static float i_min_scale = 1f;
+ /*           (m_screenSize.Width > m_screenSize.Height)
             ? (int)Math.Ceiling(m_screenSize.Width / m_screenSize.Height)
-            : (int)Math.Ceiling(m_screenSize.Height / m_screenSize.Width);
+            : (int)Math.Ceiling(m_screenSize.Height / m_screenSize.Width);*/
         private static float i_scale = i_min_scale;
         private static float i_minimum_scale_step = 1f;
         

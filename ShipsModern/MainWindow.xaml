@@ -19,14 +19,19 @@
             <SVG:SvgViewbox x:Key="minusIcon" AutoSize="True" OptimizePath="False" TextAsGeometry="True" Source="/Resources/icons/minus.svg" Stretch="Uniform"></SVG:SvgViewbox>
         </Grid.Resources>
 
-        <Image Name="fieldImg" Width="1366" Height="768" ></Image>
-        <Canvas Name="modelCanvas" Background="Transparent"></Canvas>
+        <Image Name="fieldImg" Width="1920" Height="1080" ></Image>
+        <Canvas Name="modelCanvas" Background="Transparent">
+        </Canvas>
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="White">
+            <Label Name ="timeLabel" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="50" FontSize="30" FontFamily="Bahnschrift" Content="{Binding Path=TimeFormat, UpdateSourceTrigger=PropertyChanged}"></Label>
+        </Border>
+
         <Border Background="White" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="White" CornerRadius="5" Margin="5">
             <StackPanel Margin="5" MaxWidth="400" Height="25" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Button Content="{StaticResource minusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Decrease_Scale"/>
                 <Button Content="{StaticResource plusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Increase_Scale"/>
                 <Button Content="{StaticResource draghIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="PlayOrPause"/>
-                <Slider Name="controlTimeSlider" Minimum="1" Maximum="1000" Width="200" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0"></Slider>
+                <Slider Name="controlTimeSlider" Minimum="1" Maximum="50000" Width="200" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0"></Slider>
             </StackPanel>
         </Border>
     </Grid>

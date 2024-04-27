@@ -8,6 +8,7 @@ using System;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using ShipsModern.SupportEntities;
+using ShipsForm.SupportEntities.PatternObserver;
 
 namespace ShipsForm.Logic.NodeSystem
 {
@@ -33,6 +34,7 @@ namespace ShipsForm.Logic.NodeSystem
             m_loadingSection = new LoadingSection(this, maxSize / 3);
             m_relatedPoint = relatedPointToSetNode;
             i_maxNodeSize = maxSize;
+            EventObservable.NotifyObservers((IDrawable)this);
         }
 
 

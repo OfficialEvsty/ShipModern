@@ -2,6 +2,7 @@
 using ShipsForm.Logic.ShipSystem.Behaviour.ShipStates;
 using ShipsForm.Timers;
 using System;
+using System.Linq;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
 {
@@ -28,7 +29,11 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
         public override void OnExit(ShipBehavior sb)
         {
             if (sb is IBBehavior ibb)
+            {
                 ibb.Convoy.EstablishConvoy(ibb.GetFraghts());
+                ibb.Convoy.ShipBehaviors.Where(x => x is not null).ToList().ForEach(x => x.OnArrived += ibb.ChecksIsConvoyCompleteRoute);
+            }
+                
             Console.WriteLine($"Icebreaker-[id: {sb.Ship.Id}] ends waiting of fraghts.");
         }
     }

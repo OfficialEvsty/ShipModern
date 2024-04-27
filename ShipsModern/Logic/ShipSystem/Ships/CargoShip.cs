@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System;
 using ShipsModern.SupportEntities;
 using ShipsForm.Graphic;
+using ShipsForm.SupportEntities.PatternObserver;
 
 namespace ShipsForm.Logic.ShipSystem.Ships
 {
@@ -39,6 +40,7 @@ namespace ShipsForm.Logic.ShipSystem.Ships
             m_shell = new Shell(data.ShipIceResistLevel);
             m_behavior = new CargoShipBehavior(this, m_engine, m_navigation, m_boardCargo);          
             nodeToSpawnShip.ShipTryEnterInNode(this);
+            EventObservable.NotifyObservers((IDrawable)this);
         }
 
         public override void Update()

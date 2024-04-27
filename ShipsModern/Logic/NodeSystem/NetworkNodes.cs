@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ShipsForm.Logic.TilesSystem;
+using ShipsModern.Logic.NodeSystem.OptimalNodeHost;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ShipsForm.Logic.NodeSystem
@@ -6,10 +8,11 @@ namespace ShipsForm.Logic.NodeSystem
     class NetworkNodes
     {
         private List<GeneralNode> m_nodesNetwork = new List<GeneralNode>();
+        private NetworkHost m_host;
         public static NetworkNodes Network = new NetworkNodes();
+        public NetworkHost Host { get { return m_host; } }
         public List<GeneralNode> Nodes { get { return m_nodesNetwork; } }
-        private NetworkNodes() { }
-
+        private NetworkNodes() {  m_host = new NetworkHost(this); }
 
 
         public Node AddNode(SupportEntities.Point point, int nodeSize)
@@ -25,11 +28,11 @@ namespace ShipsForm.Logic.NodeSystem
             m_nodesNetwork.Add(mn);
             return mn;
         }
-
-        public MarineNode GetNearMarineNode(GeneralNode togn, GeneralNode? fromgn = null)
+        public MarineNode AddMarine(Tile tile)
         {
-            return (fromgn is null) ? (MarineNode)Enumerable.First(m_nodesNetwork.OrderBy(x => x.GetCoords.GetDistance(togn.GetCoords)).ToList(), x => x is MarineNode) : (MarineNode)Enumerable.First(m_nodesNetwork.OrderBy(x => x.GetCoords.GetDistance(togn.GetCoords)).ToList(), x => x is MarineNode && x != fromgn);
-
+            MarineNode mn = new MarineNode(tile);
+            m_nodesNetwork.Add(mn);
+            return mn;
         }
     }
 }

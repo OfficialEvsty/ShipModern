@@ -47,6 +47,15 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
             ConvoyPosition = p;
         }
 
+        public void LeaveConvoy()
+        {
+            if (State is ShipRoutingInConvoyState)
+            {
+                ConvoyPosition = null;
+                GoNextState();
+            }    
+        }
+
         /// <summary>
         /// Due to this function cargo ship can searches suitable fraght deal.
         /// </summary>

@@ -16,6 +16,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
     interface INavigationController
     {
         public void ChooseRoute(GeneralNode gn, byte iceR);
+        public bool IsOnRoute();
     }
     class Navigation : INavigationController, IPathDrawable
     {
@@ -45,6 +46,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         public Navigation()
         {
             PaintMap();
+            //OnEndRoute += 
         }
 
         private void SetCurrentNode()
@@ -62,6 +64,10 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         {
             SetToNode(gn);
             InstallRoute(iceResistLevel);
+        }
+        public bool IsOnRoute()
+        {
+            return (ChosenRoute != null) ? true : false;
         }
 
         public void SetRotation()
@@ -181,7 +187,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         {
             if (FromNode == null || ToNode == null)
                 return false;
-            Route newRoute = new Route(FromNode, ToNode, m_map, iceResistLevel);
+            Route newRoute = new Route(FromNode, ToNode, iceResistLevel);
             AddRoute(newRoute);
             return true;
         }
@@ -195,6 +201,12 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
                 m_availableRoutes.Add(newRoute);
                 m_availableRoutes.Add(Route.GetReversedRoute(newRoute));
             }
+        }
+
+        public void AddRoutes(Route[] routes)
+        {
+            foreach(var route in routes)
+                AddRoute(route);
         }
 
         public bool CheckRouteValid(List<Tile> route)

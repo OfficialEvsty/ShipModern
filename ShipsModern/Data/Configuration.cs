@@ -10,6 +10,7 @@ namespace ShipsForm.Data
     public class Configuration
     {
         public float TileDistance;
+        public HashSet<string> TileCategories;
 
         public int FieldWidth;
         public int FieldHeight;
@@ -23,6 +24,9 @@ namespace ShipsForm.Data
 
         public float DistanceBetweenIcebreakerAndShips;
         public float DistanceBetweenShips;
+
+        public float MaxTilesToPlaceMarineNode;
+        
 
         //SVG filename's uri
         public Dictionary<string, string> SVG_Uris;

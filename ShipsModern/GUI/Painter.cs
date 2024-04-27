@@ -180,9 +180,9 @@ namespace ShipsForm.GUI
         private void DrawCells()
         {
             int LeftBound = Math.Max(0, (int)Math.Ceiling(-i_shiftX / TileWidth / CellScale));
-            int RightBound = Math.Min((int)((Size.Width + -i_shiftX)/ TileWidth / CellScale), m_field.MapLength);
+            int RightBound = Math.Min((int)((Size.Width + -i_shiftX)/ TileWidth / CellScale), m_field.MapWidth);
             int TopBound = Math.Max(0, (int)Math.Ceiling(-i_shiftY / TileWidth / CellScale));
-            int BottomBound = Math.Min((int)((Size.Height + -i_shiftY) / TileWidth / CellScale), m_field.MapWidth);
+            int BottomBound = Math.Min((int)((Size.Height + -i_shiftY) / TileWidth / CellScale), m_field.MapLength);
             for (int i = LeftBound; i < RightBound; i++)
             {
                 int prevTileId = m_field.GetTileId(i, TopBound);
@@ -269,7 +269,7 @@ namespace ShipsForm.GUI
         private void DrawModels()
         {
             // || m_canvasElementsDict.Any(y => y.Key == x && y.Value.RenderSize.Height == )
-            Application.Current.Dispatcher.Invoke(() =>
+             Application.Current.Dispatcher.Invoke(() =>
             {
                 int[] modelIds = i_activeUIIndexes.Where(x => m_models.Any(y => y.Key == x)).ToArray();
                 int[] uiIdsOnCanvas = m_canvas.Children.OfType<UIElement>().Select(x => UIIdentifier.GetId(x)).ToArray();
@@ -358,8 +358,8 @@ namespace ShipsForm.GUI
             Point GetCheckedBounds(int x, int y)
 
             {
-                Size bounds = new Size((int)(m_field.MapLength * TileWidth * CellScale)-1,
-                                         (int)(m_field.MapWidth * TileWidth * CellScale)-1);
+                Size bounds = new Size((int)(m_field.MapWidth * TileWidth * CellScale)-1,
+                                         (int)(m_field.MapLength * TileWidth * CellScale)-1);
                 int bottomBound = (int)m_primScreenSize.Height;
                 int rightBound = (int)m_primScreenSize.Width;
                 int topBound = 0, leftBound = 0;

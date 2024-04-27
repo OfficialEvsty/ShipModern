@@ -17,11 +17,13 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
         private Shell m_shell;
         private Convoy m_convoy;
         private EskortFraght[] m_fraghts;
+        private EskortFraght? m_currentActiveFraght;
         private int i_fraghtsAwaits;
 
         public bool IsLastFraghtShipArrived { get { return i_fraghtsAwaits == 0; } }
         public bool IsWaitingTimeUp;
 
+        public EskortFraght? CurrentActiveFraght { get { return m_currentActiveFraght; } }
         public Shell Shell { get { return m_shell; } }
         public Convoy Convoy { get { return m_convoy; } }
 
@@ -54,6 +56,33 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
             }
             return false;
         }
+
+        public void UpdateEskortFraghts()
+        {
+            RemoveCompletedEscortFraghts();
+            GoNextState();
+        }
+
+        public void ChecksIsConvoyCompleteRoute()
+        {
+            var isLastShipArrived = Convoy.Controller.IsLastShipInConvoyEndRoute();
+            if (isLastShipArrived) UpdateEskortFraghts();
+        }
+
+        private void RemoveCompletedEscortFraghts()
+        {
+            if (m_currentActiveFraght is null)
+                return;
+            EskortFraght[] similarEskorts = m_fraghts.Where(fraght => !(fraght is null) && fraght.ToNode == m_currentActiveFraght.ToNode).ToArray();
+            //Removes fraghts whiches have done with active fraght.
+            m_fraghts = m_fraghts.Except(similarEskorts).ToArray();
+            m_convoy.ShipBehaviors.ToList().ForEach(x => x.OnArrived -= ChecksIsConvoyCompleteRoute);
+            foreach (var completedEskort in similarEskorts)
+            {                
+                m_convoy.ReleaseShip(completedEskort);
+            }
+        }
+
         private void SortFraghts()
         {
             Array.Sort(m_fraghts);
@@ -78,7 +107,8 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
             SortFraghts();
             if (GetFraghts()[0] is null)
                 return null;
-            return GetFraghts()[0];
+            m_currentActiveFraght = GetFraghts()[0];
+            return m_currentActiveFraght;
 
         }
 
