@@ -40,13 +40,6 @@ namespace ShipsModern.SupportEntities.CustomDataStructures
 
         public TKey DequeueMin()
         {
-            /*if (dictionary.TryGetValue(key, out LinkedListNode<KeyValuePair<TKey, TValue>> node))
-            {
-                linkedList.Remove(node);
-                dictionary.Remove(key);
-                return true;
-            }
-            return false;*/
             var minKey = priority.Dequeue();
             dictionary.Remove(minKey);
             return minKey;

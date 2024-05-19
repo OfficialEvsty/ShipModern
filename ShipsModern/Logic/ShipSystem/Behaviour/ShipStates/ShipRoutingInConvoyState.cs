@@ -13,12 +13,21 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
 
         public override void OnEntry(ShipBehavior sb)
         {
-            sb.Navigation.OnEndRoute += (sb as CargoShipBehavior).OnArrived;
+            if(sb is CargoShipBehavior csb)
+            {
+                csb.Navigation.OnEndRoute += csb.OnArrived;
+            }
+            
         }
 
         public override void OnExit(ShipBehavior sb)
         {
-            sb.Navigation.OnEndRoute -= (sb as CargoShipBehavior).OnArrived;
+            if (sb is CargoShipBehavior csb)
+            {
+                sb.Navigation.OnEndRoute -= csb.OnArrived;
+                csb.OnArrived = null;
+            }
+            
             Console.WriteLine($"Ship-[id: {sb.Ship.Id}] leaves convoy.");
         }
     }

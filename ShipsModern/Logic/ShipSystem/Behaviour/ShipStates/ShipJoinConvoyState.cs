@@ -25,7 +25,6 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
             if (sb is CargoShipBehavior csb)
             {
                 csb.OnArrived?.Invoke();
-                csb.OnArrived = null;
             }              
         }
     }

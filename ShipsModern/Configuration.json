@@ -11,9 +11,9 @@
   "MultiplyTimer": 200,
   "IBWaitingMode": true,
   "IBWaitsFraghtInSeconds": 30,
-  "DistanceBetweenIcebreakerAndShips": 1000,
-  "DistanceBetweenShips": 1200,
-  "MaxTilesToPlaceMarineNode": 200,
+  "DistanceBetweenIcebreakerAndShips": 10000,
+  "DistanceBetweenShips": 12000,
+  "MaxTilesToPlaceMarineNode": 500,
 
   "SVG_Uris": {
     "CargoShip": "CargoShip.svg",
@@ -38,6 +38,8 @@
     "3": [ "Thin Ice", "Ice", "Thick Ice" ]
   },
   "ShipIceResistLevel": 2,
-  "IBIceResistLevel": 3
+  "IBIceResistLevel": 3,
+
+  "WeightParameterForAStar": 1.0
 
 }

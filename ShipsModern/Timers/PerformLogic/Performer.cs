@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using static ShipsForm.Timers.PerformLogic.Performance;
 
@@ -26,8 +27,12 @@ namespace ShipsForm.Timers.PerformLogic
             for (int i = m_performances.Count - 1; i >= 0; i--)
                 if (m_time.Time >= m_performances[i].Schedule && m_performances[i] != null)
                 {
-                    m_performances[i].Perform();
-                    m_performances.RemoveAt(i);
+                    try
+                    {
+                        m_performances[i].Perform();
+                        m_performances.RemoveAt(i);
+                    }
+                    catch (Exception ex) { Console.WriteLine(ex); }
                 }
         }
     }

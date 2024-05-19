@@ -34,8 +34,8 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             f_tileDist = data.TileDistance;
             f_distanceBetweenIS = data.DistanceBetweenIcebreakerAndShips * f_tileDist;
             f_distanceBetweenS = data.DistanceBetweenShips * f_tileDist;
-            f_shipImgLength = data.ShipImageSize;
-            f_ibImgLength = data.IcebreakerImageSize;          
+            f_shipImgLength = data.ShipImageSize * f_tileDist;
+            f_ibImgLength = data.IcebreakerImageSize * f_tileDist;          
         }
     }
 }

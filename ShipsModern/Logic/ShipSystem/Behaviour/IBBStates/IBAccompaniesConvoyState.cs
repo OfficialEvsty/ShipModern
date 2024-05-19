@@ -25,7 +25,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
 
         public override void OnExit(ShipBehavior sb)
         {
-            sb.Navigation.OnEndRoute -= sb.Engine.StopEngine;
+            sb.Navigation.OnEndRoute -= sb.Engine.StopEngine;         
         }
     }
 }

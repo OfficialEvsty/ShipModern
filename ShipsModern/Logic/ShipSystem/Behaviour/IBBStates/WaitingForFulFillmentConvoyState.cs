@@ -20,7 +20,9 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
             {
                 bool isWaiting = sb.State is WaitingForFulFillmentConvoyState;
                 bool isConvoyReady = isWaiting && sb is not null;
-                void Interrupt(object[]? args) { ibb.IsWaitingTimeUp = true; if(isConvoyReady && ibb.IsLastFraghtShipArrived) ibb.GoNextState(); }
+                void Interrupt(object[]? args) { ibb.IsWaitingTimeUp = true; if(isConvoyReady
+                        && ibb.IsLastFraghtShipArrived 
+                        && ibb.State is WaitingForFulFillmentConvoyState) ibb.GoNextState(); }
                 ibb.Ship.Performer.AddPerformance(new Timers.Time(0, 0, 1, 0), Interrupt);
             }
             
@@ -30,7 +32,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
         {
             if (sb is IBBehavior ibb)
             {
-                ibb.Convoy.EstablishConvoy(ibb.GetFraghts());
+                ibb.Convoy.EstablishConvoy(ibb.GetFraghts());             
                 ibb.Convoy.ShipBehaviors.Where(x => x is not null).ToList().ForEach(x => x.OnArrived += ibb.ChecksIsConvoyCompleteRoute);
             }
                 

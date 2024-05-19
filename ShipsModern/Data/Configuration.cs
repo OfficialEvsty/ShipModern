@@ -45,6 +45,8 @@ namespace ShipsForm.Data
         public byte IBIceResistLevel;
         public Dictionary<byte, string[]> IceResistance;
 
+        public float WeightParameterForAStar;
+
         static public Configuration? Instance;
         private Configuration() { }
 

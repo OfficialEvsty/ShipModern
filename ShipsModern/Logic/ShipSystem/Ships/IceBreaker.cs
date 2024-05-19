@@ -31,9 +31,10 @@ namespace ShipsForm.Logic.ShipSystem.Ships
             if (data is null)
                 throw new ConfigFileDoesntExistError();
             m_shell = new Shell(data.IBIceResistLevel);
-            m_convoy = new Convoy();
             m_fraghts = new EskortFraght[4];
+            m_convoy = new Convoy();
             m_behavior = new IBBehavior(this, m_navigation, m_engine, m_shell, m_convoy, m_fraghts);
+            m_convoy.SetConvoyer(m_behavior);
             m_navigation.FromNode = marineNode;
             EventObservable.NotifyObservers((IDrawable)this);
         }

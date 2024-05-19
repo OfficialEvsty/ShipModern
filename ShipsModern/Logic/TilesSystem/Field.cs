@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Newtonsoft.Json;
 using ShipsForm.Data;
 using ShipsForm.Exceptions;
+using ShipsForm.Logic.TilesSystem;
 using ShipsModern.SupportEntities.CustomDataStructures;
 
 namespace ShipsForm.Logic.TilesSystem
@@ -181,15 +182,20 @@ namespace ShipsForm.Logic.TilesSystem
         /// <summary>
         /// Builds path of tiles from directed tiles.
         /// </summary>
-        /// <param name="currentTile"></param>
-        /// <param name="targetTile"></param>
-        /// <param name="iceResistLevel"></param>
-        /// <returns>List of tiles, if path doesn't exist returns null</returns>
-        /*public static List<Tile>? BuildPath(Tile currentTile, Tile targetTile, byte iceResistLevel = 1)
+        /// <param name="currentTile">Tile where path begins</param>
+        /// <param name="targetTile">Destination tile of building path</param>
+        /// <param name="iceResistLevel">Ice resistance needed
+        /// to routing on this path</param>
+        /// <returns>List of tiles, 
+        /// if path doesn't exist returns null</returns>
+        public static List<Tile>? BuildPath(Tile currentTile, Tile targetTile, 
+            byte iceResistLevel = 1)
         {
-            Stopwatch[] timers = new Stopwatch[5] { new Stopwatch(), new Stopwatch(), new Stopwatch(), new Stopwatch(), new Stopwatch() };
-            timers[0].Start();
-            Dictionary<(int, int), List<Tile>> visitedTiles = new Dictionary<(int, int), List<Tile>>();
+            //Коллекция просмотренных плиток
+            Dictionary<(int, int), List<Tile>> visitedTiles = 
+                new Dictionary<(int, int), List<Tile>>();
+
+            //Добавление плитки в коллекцию посещенных плиток
             void AddVisitedTile(Tile tile)
             {
                 var coordsKey = (tile.X, tile.Y);
@@ -198,130 +204,33 @@ namespace ShipsForm.Logic.TilesSystem
                 else
                     visitedTiles[coordsKey] = new List<Tile>() { tile };
             }
+            //Получить коллекцию плиток, выбранную по координате
             List<Tile> GetTilesByCoordsKey((int x, int y) coordsKey)
             {
                 if (visitedTiles.ContainsKey(coordsKey))
                     return visitedTiles[coordsKey];
                 return new List<Tile>();
             }
-
-            Dictionary<(int, int), Tile> activeTiles = new Dictionary<(int, int), Tile>();
-            LinkedList<Tile> activeSortedTiles = new LinkedList<Tile>();
-
-            void AddActiveTile(Tile tile)
-            {
-                void AddNode(Tile tile)
-                {
-                    LinkedListNode<Tile>? node = activeSortedTiles.First;
-                    if (node == null)
-                    {
-                        activeSortedTiles.AddFirst(tile);
-                        return;
-                    }
-                    timers[1].Start();
-                    while (node is not null)
-                    {
-                        //Блять тут <= просто решает, я не понимаю почему...
-                        if (node.Value.CostDistance <= tile.CostDistance)
-                            node = node.Next;
-                        else
-                        {
-                            var newNode = new LinkedListNode<Tile>(tile);
-                            activeSortedTiles.AddBefore(node, newNode);
-                            return;
-                        }
-                    }
-                    timers[1].Stop();
-                    activeSortedTiles.AddLast(tile);
-                }
-                var coordsKey = (tile.X, tile.Y);
-                activeTiles.Add(coordsKey, tile);
-                AddNode(tile);
-                //if (activeTiles.ContainsKey(coordsKey))
-
-            }
-            void RemoveActiveTile(Tile tile)
-            {
-                var coordsKey = (tile.X, tile.Y);
-                if (activeTiles.ContainsKey(coordsKey))
-                {
-                    activeTiles.Remove(coordsKey);
-                    activeSortedTiles.Remove(tile);
-                }
-            }
-
-            currentTile.SetCost(0);
-            currentTile.Heuristic(targetTile.X, targetTile.Y);
-            AddActiveTile(currentTile);
-
-            while (activeTiles.Any())
-            {
-                Tile checkTile = activeSortedTiles.First.Value;
-                if (checkTile.X == targetTile.X && checkTile.Y == targetTile.Y)
-                {
-                    timers[0].Stop();
-                    Console.WriteLine($"Timer [1]:{timers[0].ElapsedMilliseconds}ms, Timer [2]:{timers[1].ElapsedMilliseconds}ms, Timer [3]:{timers[2].ElapsedMilliseconds}ms, Timer(Add ActiveTiles) [3]:{timers[3].ElapsedMilliseconds}ms, Timer(Remove ActiveTiles) [4]:{timers[4].ElapsedMilliseconds}ms");
-                    var returnedListTiles = new List<Tile>();
-                    while (checkTile != null)
-                    {
-                        returnedListTiles.Add(checkTile);
-                        checkTile = checkTile.Parent;
-                    }
-                    returnedListTiles.Reverse();
-                    return returnedListTiles;
-                }
-
-                AddVisitedTile(checkTile);
-                RemoveActiveTile(checkTile);
-                var walkableTiles = GetWalkableTiles(Instance.Map, checkTile, targetTile, iceResistLevel);
-                foreach (var walkableTile in walkableTiles)
-                {
-                    var tilesSection = GetTilesByCoordsKey((walkableTile.X, walkableTile.Y));
-                    var isBetterTile = tilesSection.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost);
-                    if (isBetterTile)
-                        continue;
-                    var isActiveTile = activeTiles.ContainsKey((walkableTile.X, walkableTile.Y));
-                    if (!isActiveTile)
-                        AddActiveTile(walkableTile);
-                }
-            }
-            Console.WriteLine($"Path from {currentTile.X} : {currentTile.Y} to {targetTile.X} : {targetTile.Y} not found.");
-            return null;
-        }*/
-        public static List<Tile>? BuildPath(Tile currentTile, Tile targetTile, byte iceResistLevel = 1)
-        {
-            Stopwatch[] timers = new Stopwatch[5] { new Stopwatch(), new Stopwatch(), new Stopwatch(), new Stopwatch(), new Stopwatch() };
-            timers[0].Start();
-            Dictionary<(int, int), List<Tile>> visitedTiles = new Dictionary<(int, int), List<Tile>>();
-
-            void AddVisitedTile(Tile tile)
-            {
-                var coordsKey = (tile.X, tile.Y);
-                if (visitedTiles.ContainsKey(coordsKey))
-                    visitedTiles[coordsKey].Add(tile);
-                else
-                    visitedTiles[coordsKey] = new List<Tile>() { tile };
-            }
-            List<Tile> GetTilesByCoordsKey((int x, int y) coordsKey)
-            {
-                if (visitedTiles.ContainsKey(coordsKey))
-                    return visitedTiles[coordsKey];
-                return new List<Tile>();
-            }
-
+            //Список просматриваемых клеток,
+            //структура LinkedHashMap реализует интерфейс
+            //приоритетной очереди и хэш-таблиц
+            //для оптимизированного доступа к элементу,
+            //а также быстрому поиску минимального элемента
             LinkedHashMap<Tile, Tile> openSet = new LinkedHashMap<Tile, Tile>();
 
             currentTile.SetCost(0);
+            //Задать эвристическую дистанцию между начальной и конечной точкой
             currentTile.Heuristic(targetTile.X, targetTile.Y);
             openSet.Add(currentTile, currentTile);
 
             while (openSet.Count > 0)
             {
+                //Берём минимальный элемент из открытого списка
                 Tile checkTile = openSet.DequeueMin();
+                //Если текущий тайл является пунктом назначения,
+                //то реконструируем путь до него
                 if (checkTile.X == targetTile.X && checkTile.Y == targetTile.Y)
-                {
-                    timers[0].Stop();
-                    Console.WriteLine($"Timer [1]:{timers[0].ElapsedMilliseconds}ms, Timer [2]:{timers[1].ElapsedMilliseconds}ms, Timer [3]:{timers[2].ElapsedMilliseconds}ms, Timer(Add ActiveTiles) [3]:{timers[3].ElapsedMilliseconds}ms, Timer(Remove ActiveTiles) [4]:{timers[4].ElapsedMilliseconds}ms");
+                {                    
                     var reconstructedTilesList = new List<Tile>();
                     while (checkTile != null)
                     {
@@ -333,18 +242,23 @@ namespace ShipsForm.Logic.TilesSystem
                 }
 
                 AddVisitedTile(checkTile);
-                var walkableTiles = GetWalkableTiles(Instance.Map, checkTile, targetTile, iceResistLevel);
+                //Получаем соседние плитки относительно
+                //рассматриваемой плитки(их обычно 8)
+                var walkableTiles = GetWalkableTiles(Instance.Map, checkTile, 
+                    targetTile, iceResistLevel);
                 foreach (var walkableTile in walkableTiles)
                 {
                     var tilesSection = GetTilesByCoordsKey((walkableTile.X, walkableTile.Y));
-                    var isBetterTile = tilesSection.Any(tile => tile.X == walkableTile.X && tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost);
+                    var isBetterTile = tilesSection.Any(tile => tile.X == walkableTile.X && 
+                    tile.Y == walkableTile.Y && tile.Cost <= walkableTile.Cost);
                     if (isBetterTile)
                         continue;
 
                     openSet.Add(walkableTile, walkableTile);
                 }
             }
-            Console.WriteLine($"Path from {currentTile.X} : {currentTile.Y} to {targetTile.X} : {targetTile.Y} not found.");
+            Console.WriteLine($"Path from {currentTile.X} : {currentTile.Y} to " +
+                $"{targetTile.X} : {targetTile.Y} not found.");
             return null;
         }
 

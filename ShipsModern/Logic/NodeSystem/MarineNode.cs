@@ -29,11 +29,6 @@ namespace ShipsForm.Logic.NodeSystem
             EventObservable.NotifyObservers((IDrawable)this);
         }
 
-        public void ShipLeaveMarineNode(CargoShip cs)
-        {
-            if (cs.Behavior.State is SearchProfitRouteState)
-                cs.Behavior.GoNextState();
-        }
 
         public override SupportEntities.Point? GetCurrentPoint()
         {

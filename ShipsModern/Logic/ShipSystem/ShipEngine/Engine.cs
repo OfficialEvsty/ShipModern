@@ -5,7 +5,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipEngine
     interface IEngineController
     {
         void ChangeSpeed(float speed);
-        void SwitchMode();
+        void SwitchMode(bool mode);
     }
 
     class Engine : IEngineController
@@ -43,9 +43,9 @@ namespace ShipsForm.Logic.ShipSystem.ShipEngine
             IsStartEngine = false;
         }
 
-        public void SwitchMode()
+        public void SwitchMode(bool mode)
         {
-            b_isConvoyMode = !b_isConvoyMode;
+            b_isConvoyMode = mode;
             if (b_isConvoyMode)
                 StartEngine();
             else

@@ -35,6 +35,7 @@ namespace ShipsModern
         Launcher launcher;
         FraghtConstructor f_construct;
         bool UIControlsAlreadyInitialized = false;
+        public static MainWindow Instance { get; private set; }
 
 
         private Painter m_painter;
@@ -42,6 +43,7 @@ namespace ShipsModern
         int minDragLen = 5;
         public MainWindow()
         {
+            Instance = this;
             InitializeComponent();
             UIControlsAlreadyInitialized = true;
             AllocConsole();
@@ -134,6 +136,14 @@ namespace ShipsModern
                 throw new ConfigFileDoesntExistError();
             var multiplier = (int)e.NewValue;
             config.MultiplyTimer = multiplier;          
+        }
+
+        public void SetTimeLable(string timestr = "00:00:00")
+        {
+            lock (timeLabel)
+            {
+                timeLabel.Content = timestr;
+            }            
         }
     }
 }

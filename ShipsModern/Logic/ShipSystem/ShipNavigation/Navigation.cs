@@ -115,7 +115,9 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
                 FromNode = CurrentNode;
                 CurrentTile = null;
                 ChosenRoute = null;
-                OnEndRoute?.Invoke();
+                //OnEndRoute?.Invoke();
+                var copiedActionOnEndRoute = OnEndRoute;
+                copiedActionOnEndRoute?.Invoke();
                 f_distanceTraveledOnCurrentTile = 0;
                 Console.WriteLine("Путь пройден");
                 return;
@@ -145,11 +147,11 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         {
             if (FromNode == null || ToNode == null)
                 return;
-            var route = GetRouteFromList(FromNode, ToNode);
+            var route = Route.GetRouteFromList(FromNode, ToNode, m_availableRoutes);
             if (route == null)
             {
                 BuildNewRoute(iceResistLevel);
-                route = GetRouteFromList(FromNode, ToNode);
+                route = Route.GetRouteFromList(FromNode, ToNode, m_availableRoutes);
             }
             if (route == null)
                 return;
@@ -165,24 +167,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
                     return true;
             return false;
         }
-        public Route? GetRouteFromList(GeneralNode from, GeneralNode to)
-        {
-            Tile tileFrom = from.TileCoords;
-            Tile tileTo = to.TileCoords;
-            if (tileFrom == null || tileTo == null)
-                return null;
-
-            foreach (var route in m_availableRoutes)
-            {
-
-                if (route.Tiles.First().X == tileFrom.X && route.Tiles.First().Y == tileFrom.Y)
-                {
-                    if (route.Tiles.Last().X == tileTo.X && route.Tiles.Last().Y == tileTo.Y)
-                        return route;
-                }
-            }
-            return null;
-        }
+        
         private bool BuildNewRoute(byte iceResistLevel = 1)
         {
             if (FromNode == null || ToNode == null)

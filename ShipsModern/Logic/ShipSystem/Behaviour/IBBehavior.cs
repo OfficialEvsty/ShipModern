@@ -69,14 +69,31 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
             if (isLastShipArrived) UpdateEskortFraghts();
         }
 
+        private void RemoveSameDestinationNodeFraghts(EskortFraght[] sameNodeDestinationEskorts)
+        {
+            foreach (var fraght in sameNodeDestinationEskorts)
+            {
+                for(int i = 0; i < m_fraghts.Length; i++)
+                    if (m_fraghts[i] != null && m_fraghts[i].Id == fraght.Id)
+                        m_fraghts[i] = null;
+            }
+        }
+
         private void RemoveCompletedEscortFraghts()
         {
             if (m_currentActiveFraght is null)
                 return;
             EskortFraght[] similarEskorts = m_fraghts.Where(fraght => !(fraght is null) && fraght.ToNode == m_currentActiveFraght.ToNode).ToArray();
             //Removes fraghts whiches have done with active fraght.
-            m_fraghts = m_fraghts.Except(similarEskorts).ToArray();
-            m_convoy.ShipBehaviors.ToList().ForEach(x => x.OnArrived -= ChecksIsConvoyCompleteRoute);
+            RemoveSameDestinationNodeFraghts(similarEskorts);
+            var behaviors = m_convoy.ShipBehaviors.Where(x => x is not null).ToArray();
+            foreach(var behavior in behaviors)
+            {
+                behavior.OnArrived -= ChecksIsConvoyCompleteRoute;
+                behavior.OnArrived -= (Ship as IceBreaker).ArrivedShipHandler;
+                behavior.Navigation.OnEndRoute -= ChecksIsConvoyCompleteRoute;
+                behavior.Navigation.OnEndRoute -= (Ship as IceBreaker).ArrivedShipHandler;
+            }
             foreach (var completedEskort in similarEskorts)
             {                
                 m_convoy.ReleaseShip(completedEskort);

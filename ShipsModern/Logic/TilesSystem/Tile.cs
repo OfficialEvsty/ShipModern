@@ -1,6 +1,7 @@
 ﻿
 using ShipsForm.Exceptions;
 using ShipsForm.Logic.ShipSystem.Behaviour.ShipStates;
+using ShipsForm.SupportEntities;
 using System;
 
 namespace ShipsForm.Logic.TilesSystem
@@ -51,10 +52,15 @@ namespace ShipsForm.Logic.TilesSystem
 
         public void Heuristic(int targetX, int targetY)
         {
-            var e = 1.25f;
+            var data = Data.Configuration.Instance;
+            if (data is null)
+                throw new ConfigFileDoesntExistError();
+            
+            //Heuristic weight parameter, necessary for decreasing count of excess tiles in openSet.
+            var e = data.WeightParameterForAStar;
             float dx = MathF.Abs(targetX - X);
             float dy = MathF.Abs(targetY - Y);
-            Distance = MathF.Min(dx, dy);
+            Distance = e * MathF.Min(dx, dy);
             /*MathF.Max(MathF.Abs(targetX - X), MathF.Abs(targetY - Y)) + MathF.Min(MathF.Abs(targetX - X), MathF.Abs(targetY - Y));*//*e*MathF.Sqrt(MathF.Pow(targetX - X, 2) + MathF.Pow(targetY - Y, 2));*/
         }
 

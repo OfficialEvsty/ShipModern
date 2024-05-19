@@ -67,7 +67,7 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
                     if (args is null || args.Length == 0)
                         throw new ArgumentNullException(nameof(args));
                     if (args[0] is int index)
-                        m_engines[index].SwitchMode();
+                        m_engines[index].SwitchMode(true);
                     PassControllerPerformer();
                 }
                 void PassControllerPerformer()
@@ -75,26 +75,30 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
                     int index = scheme.Current++;
                     float interval = scheme.Interval;
                     if (index >= m_engines.Length)
+                    {
+                        scheme.Current = 0;
                         return;
-
+                    }
+                        
                     float avgSpeed = m_convoy.m_shipBehaviors[index].Engine.AverageSpeedInKM;
                     var data = Data.Configuration.Instance;
                     if (data is null)
                         throw new Exception("Config file doesn't exist in context.");
                     int tick = data.TimeTickMS;
-                    int timeToPerform = (int)(interval / avgSpeed * tick);
+                    int timeToPerform = (int)(interval / (avgSpeed * tick * data.MultiplyTimer));
                     var shipBehavior = m_convoy.m_shipBehaviors[index];
                     shipBehavior.Ship.Performer.AddPerformance(new Timers.Time(timeToPerform), ControlPassed, index);
                 }
             }
             public void EndEskorting(IEngineController control)
             {
-                control.SwitchMode();
+                control.SwitchMode(false);
             }
         }
         public ConvoyController Controller { get; }
         private Scheme m_scheme;
         private CargoShipBehavior[]? m_shipBehaviors = null;
+        private IBBehavior m_ibb; 
         private int i_maxConvoySize;
 
         public bool IsEskorting { get; set; }
@@ -108,6 +112,11 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             Controller = new ConvoyController(this);
         }
 
+        public void SetConvoyer(IBBehavior ibb)
+        {
+            m_ibb = ibb;
+        }
+
         private int AddShip(CargoShipBehavior behavior)
         {
             int id = behavior.Ship.Id;
@@ -115,6 +124,9 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             if (index != -1)
             {
                 m_shipBehaviors[index] = behavior;
+                m_shipBehaviors[index].OnArrived -= (m_ibb.Ship as IceBreaker).ArrivedShipHandler;
+                m_shipBehaviors[index].Navigation.OnEndRoute -= (m_ibb.Ship as IceBreaker).ArrivedShipHandler;
+
                 return id;
             }
             throw new Exception("Can't add ship in Icebreaker's convoy.");

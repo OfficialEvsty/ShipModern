@@ -14,6 +14,8 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
         private GeneralNode m_to;
         private byte b_iceResistanceLevel;
 
+        public byte IceLevel { get { return b_iceResistanceLevel; } }
+
         public List<Tile> Tiles { get { return m_tiles; } }
 
         public Route(GeneralNode from, GeneralNode to, byte iceResistanceLevel)
@@ -32,6 +34,33 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
             m_from = from;
             m_to = to;
             b_iceResistanceLevel = iceResistanceLevel;
+        }
+
+        private Route(List<Tile> tilesList, GeneralNode from, GeneralNode to, byte iceResistanceLevel)
+        {
+            m_tiles = tilesList;
+            m_from = from;
+            m_to = to;
+            b_iceResistanceLevel = iceResistanceLevel;
+        }
+
+        public static Route? GetRouteFromList(GeneralNode from, GeneralNode to, List<Route> availableRoutes)
+        {
+            Tile tileFrom = from.TileCoords;
+            Tile tileTo = to.TileCoords;
+            if (tileFrom == null || tileTo == null)
+                return null;
+
+            foreach (var route in availableRoutes)
+            {
+
+                if (route.Tiles.First().X == tileFrom.X && route.Tiles.First().Y == tileFrom.Y)
+                {
+                    if (route.Tiles.Last().X == tileTo.X && route.Tiles.Last().Y == tileTo.Y)
+                        return route;
+                }
+            }
+            return null;
         }
 
         private static List<Tile> BuildRoute(Tile from, Tile to, byte iceResistanceLevel)
@@ -89,8 +118,11 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
             if (data is null)
                 throw new ConfigFileDoesntExistError();
 
+            Route? mainRoute = GetRouteFromList(from, to, allRoutes);
+            if (mainRoute != null)
+                return mainRoute;
             byte maxIceLevelResistance = data.IceResistance.Keys.Max();
-            Route mainRoute = new Route(from, to, maxIceLevelResistance);
+            mainRoute = new Route(from, to, maxIceLevelResistance);
             return mainRoute;
         }
 
@@ -100,15 +132,56 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
             if (!mainRoute.IsIceZone())
             {
                 mainRoute.b_iceResistanceLevel = iceResistanceLevel;
-                return mainRoute.m_to;
+                return (mainRoute.m_from, mainRoute.m_to);
             }
             (Tile fst, Tile snd) MNTilesPair = mainRoute.GetIceBonds();
             var fst_mn = NetworkNodes.Network.Host.GetOrCreateMarineNode(MNTilesPair.fst);
-            NetworkNodes.Network.Host.GetOrCreateMarineNode(MNTilesPair.snd);            
-            return fst_mn;
+            var snd_mn = NetworkNodes.Network.Host.GetOrCreateMarineNode(MNTilesPair.snd);            
+            return (fst_mn, snd_mn);
+        }
+
+        public Route[] SplitMainRoute((GeneralNode mn1, GeneralNode mn2) splitNodes, byte iceResistance)
+        {
+            var data = ShipsForm.Data.Configuration.Instance;
+            if (data is null)
+                throw new ConfigFileDoesntExistError();
+            byte maxIceLevelResistance = data.IceResistance.Keys.Max();
+
+            var fstSplitTile = splitNodes.Item1.TileCoords;
+            var sndSplitTile = splitNodes.Item2.TileCoords;
+            Queue<(GeneralNode Node, Tile Tile)> splittedTiles = 
+                new Queue<(GeneralNode, Tile)>
+                (new (GeneralNode, Tile)[] { (m_from, Tiles[0]), 
+                    (splitNodes.Item1, fstSplitTile), 
+                    (splitNodes.Item2, sndSplitTile), 
+                    (m_to, Tiles[Tiles.Count - 1]) });
+
+            var start = splittedTiles.Dequeue();
+            var end = splittedTiles.Dequeue();
+            List<Tile> tilesRoute = new List<Tile>();
+            List<Route> splittedRoute = new List<Route>();            
+            for (int i = 0; i < Tiles.Count; i++)
+            {
+                tilesRoute.Add(Tiles[i]);
+                if (Tiles[i].Equals(end.Tile)) 
+                {
+                    splittedRoute.Add(
+                        new Route(tilesList: tilesRoute.ToList(), 
+                        start.Node, end.Node, 
+                        (start.Node==splitNodes.mn1 && end.Node == splitNodes.mn2) ? maxIceLevelResistance : iceResistance));
+                    tilesRoute.Clear();
+                    if(splittedTiles.Count > 0)
+                    {
+                        start = end;
+                        tilesRoute.Add(start.Tile);
+                        end = splittedTiles.Dequeue();
+                    }
+                }
+            }
+            return splittedRoute.ToArray();
         }
         /// <summary>
-        /// Cheks route existing with up-cost condition.
+        /// Checks route existing with up-cost condition.
         /// </summary>
         /// <param name="cost"></param>
         /// <returns></returns>

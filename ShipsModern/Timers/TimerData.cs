@@ -1,7 +1,9 @@
 ﻿using ShipsForm.Data;
+using ShipsModern;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace ShipsForm.Timers
 {
@@ -163,6 +165,10 @@ namespace ShipsForm.Timers
         public void OnPropertyChanged()
         {
             NotifyPropertyChanged("TimeFormat");
+            if (MainWindow.Instance.timeLabel.Dispatcher.CheckAccess() == false)
+            {
+                Application.Current.Dispatcher.Invoke(MainWindow.Instance.SetTimeLable, TimeFormat);
+            }
         }
     }
 }

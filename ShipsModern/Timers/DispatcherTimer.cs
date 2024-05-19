@@ -22,7 +22,7 @@ namespace ShipsForm.Timers
         {
             TimerCallback tm = new TimerCallback(Running);
             i_tick = tick;
-            m_timer = new System.Threading.Timer(tm, null, 0, i_tick);
+            m_timer = new Timer(tm, null, 0, i_tick);
             b_isRunning = true;
         }
 
