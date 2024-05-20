@@ -9,6 +9,8 @@ using ShipsForm.Logic.FraghtSystem;
 using ShipsForm.Logic.NodeSystem;
 using System;
 using System.Linq;
+using ShipsModern.Logic.ShipSystem.ShipNavigation;
+using System.Windows;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour
 {
@@ -64,9 +66,10 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
         }
 
         public void ChecksIsConvoyCompleteRoute()
-        {
+        {           
             var isLastShipArrived = Convoy.Controller.IsLastShipInConvoyEndRoute();
             if (isLastShipArrived) UpdateEskortFraghts();
+            Console.WriteLine(isLastShipArrived);
         }
 
         private void RemoveSameDestinationNodeFraghts(EskortFraght[] sameNodeDestinationEskorts)
@@ -83,16 +86,17 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour
         {
             if (m_currentActiveFraght is null)
                 return;
-            EskortFraght[] similarEskorts = m_fraghts.Where(fraght => !(fraght is null) && fraght.ToNode == m_currentActiveFraght.ToNode).ToArray();
+            EskortFraght[] similarEskorts = m_fraghts.Where(fraght => !(fraght is null) 
+            && Route.IsRouteValid(Navigation.CurrentNode, fraght.ToNode)).ToArray();
             //Removes fraghts whiches have done with active fraght.
             RemoveSameDestinationNodeFraghts(similarEskorts);
             var behaviors = m_convoy.ShipBehaviors.Where(x => x is not null).ToArray();
-            foreach(var behavior in behaviors)
+            foreach(CargoShipBehavior behavior in behaviors)
             {
-                behavior.OnArrived -= ChecksIsConvoyCompleteRoute;
-                behavior.OnArrived -= (Ship as IceBreaker).ArrivedShipHandler;
-                behavior.Navigation.OnEndRoute -= ChecksIsConvoyCompleteRoute;
-                behavior.Navigation.OnEndRoute -= (Ship as IceBreaker).ArrivedShipHandler;
+                foreach(var eskortFraght in similarEskorts)
+                    if (behavior is not null && eskortFraght.GetOrder() == behavior)
+                        behavior.OnArrived -= ChecksIsConvoyCompleteRoute;
+                        behavior.Navigation.OnEndRoute -= ChecksIsConvoyCompleteRoute;
             }
             foreach (var completedEskort in similarEskorts)
             {                

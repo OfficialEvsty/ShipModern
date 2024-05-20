@@ -1,6 +1,7 @@
 ﻿
 
 using ShipsForm.Logic.ShipSystem.Ships;
+using System;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
 {
@@ -24,7 +25,8 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
             sb.Navigation.OnEndRoute -= sb.GoNextState;
             if (sb is CargoShipBehavior csb)
             {
-                csb.OnArrived?.Invoke();
+                Action? copiedOnArrived = csb.OnArrived;
+                copiedOnArrived?.Invoke();
             }              
         }
     }

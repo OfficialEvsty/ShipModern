@@ -185,7 +185,7 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
         /// </summary>
         /// <param name="cost"></param>
         /// <returns></returns>
-        public static bool IsRouteValid(Tile destiny, MarineNode mn, byte iceLevel, int cost)
+        public static bool IsRouteValidUpperCost(Tile destiny, MarineNode mn, byte iceLevel, int cost)
         {
             var tiles = BuildRoute(destiny, mn.TileCoords, iceLevel);
             if (tiles == null)
@@ -193,6 +193,14 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
             if (tiles[tiles.Count - 1].Cost <= cost)
                 return true;
             return false;
+        }
+
+        public static bool IsRouteValid(GeneralNode gnFrom, GeneralNode gnTo, byte iceLevel = 1)
+        {
+            var tiles = BuildRoute(gnFrom.TileCoords, gnTo.TileCoords, iceLevel);
+            if (tiles == null)
+                return false;
+            return true;
         }
 
         public static bool IsRoutesEqual(Route roate1, Route roate2)

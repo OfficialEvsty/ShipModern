@@ -50,7 +50,7 @@ namespace ShipsModern.Logic.NodeSystem.OptimalNodeHost
         private MarineNode[] GetCheckedRouteToMarineNodes(MarineNode[] mnodes, Tile destinyTile, int maxCost)
         {
             byte iceResistanceLevel = 1;
-            return mnodes.Where(node => Route.IsRouteValid(destinyTile, node, iceResistanceLevel, maxCost)).ToArray();
+            return mnodes.Where(node => Route.IsRouteValidUpperCost(destinyTile, node, iceResistanceLevel, maxCost)).ToArray();
         }
                 
         public MarineNode GetNearMarineNode(GeneralNode togn, GeneralNode? fromgn = null)

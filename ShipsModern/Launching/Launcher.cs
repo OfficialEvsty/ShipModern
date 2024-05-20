@@ -31,6 +31,7 @@ namespace ShipsForm.Launching
             Node node1 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.8f, 0.56f), 5);
             Node node2 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.2f, 0.1f), 8);
             Node node3 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.1f, 0.2f), 2);
+            Node node4 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.75f, 0.65f), 2);
             //MarineNode marineNode1 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.1f, 0.1f));
             //MarineNode marineNode2 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.1f, 0.12f));
             Dictionary<Cargo, int> requiredCargo = new Dictionary<Cargo, int>();
@@ -39,9 +40,13 @@ namespace ShipsForm.Launching
             requiredCargo1.Add(new CargoContainer(node1), 5);
             Dictionary<Cargo, int> requiredCargo2 = new Dictionary<Cargo, int>();
             requiredCargo2.Add(new CargoContainer(node3), 8);
+            Dictionary<Cargo, int> requiredCargo3 = new Dictionary<Cargo, int>();
+            requiredCargo3.Add(new CargoContainer(node4), 8);
+
             Ship thirdShip = new CargoShip(node3);
             Ship myGreatShip = new CargoShip(node2);
             Ship MYSHIP = new CargoShip(node1);
+            Ship shippa = new CargoShip(node4);
 
             //Ship icebreaker = new IceBreaker(marineNode1);
 
@@ -54,6 +59,7 @@ namespace ShipsForm.Launching
             CargoFraght fraght = new CargoFraght(requiredCargo, node2, node1);
             CargoFraght fraght2 = new CargoFraght(requiredCargo1, node1, node2);
             CargoFraght fraght3 = new CargoFraght(requiredCargo2, node3, node1);
+            CargoFraght fraght4 = new CargoFraght(requiredCargo3, node4, node3);
         }
     }
 }

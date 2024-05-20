@@ -24,8 +24,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.ShipStates
         {
             if (sb is CargoShipBehavior csb)
             {
-                sb.Navigation.OnEndRoute -= csb.OnArrived;
-                csb.OnArrived = null;
+                csb.Navigation.OnEndRoute -= csb.OnArrived;
             }
             
             Console.WriteLine($"Ship-[id: {sb.Ship.Id}] leaves convoy.");
