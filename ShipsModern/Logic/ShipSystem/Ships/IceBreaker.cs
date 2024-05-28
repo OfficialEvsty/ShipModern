@@ -25,8 +25,8 @@ namespace ShipsForm.Logic.ShipSystem.Ships
         public IceBreaker(MarineNode marineNode)
         {
             Id = Manager.GetGuiElementID();
-            m_navigation = new Navigation();
             m_engine = new Engine();
+            m_navigation = new Navigation(m_engine);
             var data = Data.Configuration.Instance;
             if (data is null)
                 throw new ConfigFileDoesntExistError();

@@ -9,6 +9,7 @@ namespace ShipsForm.Logic.TilesSystem
     [Serializable]
     public class Tile
     {
+        public int Id { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int TileCost { get; init; }

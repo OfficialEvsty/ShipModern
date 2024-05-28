@@ -1,4 +1,5 @@
 ﻿using ShipsForm.Data;
+using System;
 
 namespace ShipsForm.Logic.ShipSystem.ShipEngine
 {
@@ -18,12 +19,15 @@ namespace ShipsForm.Logic.ShipSystem.ShipEngine
         private float f_currentSpeed;
         private bool b_isConvoyMode;
 
+        public Action<int> OnSwitchTile;
+
         public Engine()
         {
             MaxSpeedInKM = 40;
             AverageSpeedInKM = MaxSpeedInKM * 3 / 4;
             CaravanSpeedInKM = Data.Configuration.Instance.CaravanSpeed;
             f_currentSpeed = AverageSpeedInKM;
+            OnSwitchTile += Change;
         }
 
         public float Running()
@@ -60,6 +64,12 @@ namespace ShipsForm.Logic.ShipSystem.ShipEngine
             if (!b_isConvoyMode)
                 return;
             f_currentSpeed = speed;
+        }
+
+        private void Change(int tileId)
+        {
+            var speedTiles = Configuration.Instance.ShipSpeedOnTile[tileId];
+            f_currentSpeed = speedTiles;
         }
     }
 }

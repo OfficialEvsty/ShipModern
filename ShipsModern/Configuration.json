@@ -37,6 +37,13 @@
     "2": [],
     "3": [ "Thin Ice", "Ice", "Thick Ice" ]
   },
+  "ShipSpeedOnTile":[
+    30,
+    0,
+    5,
+    10,
+    15
+  ],
   "ShipIceResistLevel": 2,
   "IBIceResistLevel": 3,
 

@@ -108,12 +108,12 @@ namespace ShipsForm.Logic.TilesSystem
                     {
                         float dist = MathF.Sqrt(MathF.Pow(parent.X - i, 2) + MathF.Pow(parent.Y - j, 2));
                         int additionCost = (int)(type.Cost * (dist - 1));
-                        Tile newTile = new Tile() { TileCost = type.Cost + additionCost, X = i, Y = j, Passable = type.Passable, Parent = parent, Category=type.Category };
+                        Tile newTile = new Tile() { Id = type.Id, TileCost = type.Cost + additionCost, X = i, Y = j, Passable = type.Passable, Parent = parent, Category=type.Category };
                         return newTile;
                     }
                     else
                     {
-                        Tile newTile = new Tile() { TileCost = type.Cost, X = i, Y = j, Passable = type.Passable, Category = type.Category };
+                        Tile newTile = new Tile() { Id = type.Id, TileCost = type.Cost, X = i, Y = j, Passable = type.Passable, Category = type.Category };
                         return newTile;
                     }
                 }

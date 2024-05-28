@@ -10,6 +10,7 @@ using System.Configuration;
 using ShipsModern.Logic.ShipSystem.ShipNavigation;
 using ShipsForm.SupportEntities.PatternObserver.Observers;
 using ShipsForm.SupportEntities.PatternObserver;
+using ShipsForm.Logic.ShipSystem.ShipEngine;
 
 namespace ShipsForm.Logic.ShipSystem.ShipNavigation
 {
@@ -28,6 +29,7 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         public Tile CurrentTile { get; private set; }
         public double CurrentRotation { get; private set; }
         public event Action OnEndRoute;
+        public event Action<int> OnSwitchTile;
 
         public float DistanceTraveledOnCurrentTile
         {
@@ -43,9 +45,10 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         public GeneralNode? FromNode { get; set; }
         public GeneralNode? ToNode { get; set; }
 
-        public Navigation()
+        public Navigation(Engine shipEngine)
         {
             PaintMap();
+            OnSwitchTile += shipEngine.OnSwitchTile;
             //OnEndRoute += 
         }
 
@@ -122,7 +125,10 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
                 Console.WriteLine("Путь пройден");
                 return;
             }
-            CurrentTile = GetNextTile();
+            var nextTile = GetNextTile();
+            if (nextTile is not null && nextTile.Id != CurrentTile.Id)
+                OnSwitchTile(nextTile.Id);
+            CurrentTile = nextTile;
             SetRotation();
         }
         private Tile? GetNextTile()

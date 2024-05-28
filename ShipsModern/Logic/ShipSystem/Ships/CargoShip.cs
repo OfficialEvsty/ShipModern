@@ -34,9 +34,9 @@ namespace ShipsForm.Logic.ShipSystem.Ships
             var data = Data.Configuration.Instance;
             if (data is null)
                 throw new ConfigFileDoesntExistError();
-            m_navigation = new Navigation();
             m_boardCargo = new BoardCargo();
             m_engine = new Engine();
+            m_navigation = new Navigation(m_engine);
             m_shell = new Shell(data.ShipIceResistLevel);
             m_behavior = new CargoShipBehavior(this, m_engine, m_navigation, m_boardCargo);          
             nodeToSpawnShip.ShipTryEnterInNode(this);
