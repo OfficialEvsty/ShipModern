@@ -87,7 +87,7 @@ namespace ShipsForm.Logic.TilesSystem
 
         public Tile GetSerializableTile()
         {
-            return new Tile() { Category=this.Category, Cost=this.Cost, Distance=this.Distance, 
+            return new Tile() { Id = this.Id, Category=this.Category, Cost=this.Cost, Distance=this.Distance, 
                 Parent=null, Passable = this.Passable, TileCost=this.TileCost, X=this.X, Y=this.Y};
         }
     }

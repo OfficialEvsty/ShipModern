@@ -12,7 +12,7 @@
   "IBWaitingMode": true,
   "IBWaitsFraghtInSeconds": 30,
   "DistanceBetweenIcebreakerAndShips": 1,
-  "DistanceBetweenShips": 999999,
+  "DistanceBetweenShips": 1999999,
   "MaxTilesToPlaceMarineNode": 500,
 
   "SVG_Uris": {
