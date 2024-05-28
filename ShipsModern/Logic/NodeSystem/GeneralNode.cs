@@ -5,7 +5,8 @@ using System;
 
 namespace ShipsForm.Logic.NodeSystem
 {
-    abstract class GeneralNode : IDrawable
+    [Serializable]
+    public abstract class GeneralNode : IDrawable
     {
         /// <summary>
         /// Related coords in scope [0, 1].

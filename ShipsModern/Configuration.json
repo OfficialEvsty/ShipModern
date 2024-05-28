@@ -7,12 +7,12 @@
   "CellScale": 2,
   "FieldWidth": 4000,
   "FieldHeight": 4000,
-  "TimeTickMS": 50,
+  "TimeTickMS": 10,
   "MultiplyTimer": 200,
   "IBWaitingMode": true,
   "IBWaitsFraghtInSeconds": 30,
-  "DistanceBetweenIcebreakerAndShips": 10000,
-  "DistanceBetweenShips": 12000,
+  "DistanceBetweenIcebreakerAndShips": 1,
+  "DistanceBetweenShips": 999999,
   "MaxTilesToPlaceMarineNode": 500,
 
   "SVG_Uris": {
@@ -41,5 +41,4 @@
   "IBIceResistLevel": 3,
 
   "WeightParameterForAStar": 1.0
-
 }

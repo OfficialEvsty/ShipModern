@@ -7,12 +7,16 @@ using System.Linq;
 
 namespace ShipsModern.Logic.ShipSystem.ShipNavigation
 {
+    [Serializable]
     class Route
     {
         private List<Tile> m_tiles;
         private GeneralNode m_from;
         private GeneralNode m_to;
         private byte b_iceResistanceLevel;
+
+        public GeneralNode From { get {  return m_from; } }
+        public GeneralNode To { get { return m_to; } }
 
         public byte IceLevel { get { return b_iceResistanceLevel; } }
 
@@ -36,7 +40,7 @@ namespace ShipsModern.Logic.ShipSystem.ShipNavigation
             b_iceResistanceLevel = iceResistanceLevel;
         }
 
-        private Route(List<Tile> tilesList, GeneralNode from, GeneralNode to, byte iceResistanceLevel)
+        public Route(List<Tile> tilesList, GeneralNode from, GeneralNode to, byte iceResistanceLevel)
         {
             m_tiles = tilesList;
             m_from = from;

@@ -14,7 +14,7 @@ namespace ShipsForm.Timers
         public readonly int MINUTE_IN_HOUR = 60;
         public readonly int HOUR_IN_DAY = 24;
 
-        private static int GetMS(Time t) { return t.MSeconds + t.Seconds * t.MSEC_IN_SEC + t.Minutes * t.SEC_IN_MINUTE * t.MSEC_IN_SEC + t.Hours * t.MINUTE_IN_HOUR * t.SEC_IN_MINUTE * t.MSEC_IN_SEC; }
+        private static int GetMS(Time t) { return t.MSeconds + t.Seconds * t.MSEC_IN_SEC + t.Minutes * t.SEC_IN_MINUTE * t.MSEC_IN_SEC + t.Hours * t.MINUTE_IN_HOUR * t.SEC_IN_MINUTE * t.MSEC_IN_SEC + t.Days * t.HOUR_IN_DAY * t.MINUTE_IN_HOUR * t.SEC_IN_MINUTE * t.MSEC_IN_SEC; }
 
         private int i_mseconds;
         public int MSeconds
@@ -71,16 +71,33 @@ namespace ShipsForm.Timers
                 if (value > -1)
                 {
                     i_hours = value % HOUR_IN_DAY;
+                    Days += value / HOUR_IN_DAY;
                 }                    
             }
         }
-
-        public Time(int ms, int s=0, int m=0, int h=0)
+        private int i_days;
+        public int Days
         {
-            i_mseconds = ms;
-            i_seconds = s;
-            i_minutes = m;
-            i_hours = h;
+            get
+            {
+                return i_days;
+            }
+            set
+            {
+                if(value > -1)
+                {
+                    i_days = value;
+                }
+            }
+        }
+
+        public Time(int ms, int s=0, int m=0, int h=0, int d=0)
+        {
+            i_days = d + (h / HOUR_IN_DAY) + (m / (HOUR_IN_DAY * MINUTE_IN_HOUR)) + (s / (HOUR_IN_DAY * MINUTE_IN_HOUR * SEC_IN_MINUTE)) + (ms / (HOUR_IN_DAY * MINUTE_IN_HOUR * SEC_IN_MINUTE * MSEC_IN_SEC));
+            i_hours = (h + (m / MINUTE_IN_HOUR) + (s / (MINUTE_IN_HOUR * SEC_IN_MINUTE)) + (ms / (MINUTE_IN_HOUR * SEC_IN_MINUTE * MSEC_IN_SEC))) % HOUR_IN_DAY;
+            i_minutes = (m + (s / SEC_IN_MINUTE) + (ms / (SEC_IN_MINUTE * MSEC_IN_SEC))) % MINUTE_IN_HOUR;
+            i_seconds = (s + (ms / MSEC_IN_SEC)) % SEC_IN_MINUTE;
+            i_mseconds = ms % MSEC_IN_SEC;
         }
         public static Time operator +(Time a, Time b)
         {
@@ -88,7 +105,8 @@ namespace ShipsForm.Timers
             int s = a.Seconds + b.Seconds + ms / a.MSEC_IN_SEC;
             int m = a.Minutes + b.Minutes + s / a.SEC_IN_MINUTE;
             int h = a.Hours + b.Hours + m / a.MINUTE_IN_HOUR;
-            return new Time(ms % a.MSEC_IN_SEC, s % a.SEC_IN_MINUTE, m % a.MINUTE_IN_HOUR, h % a.HOUR_IN_DAY);
+            int d = a.Days + b.Days;
+            return new Time(ms % a.MSEC_IN_SEC, s % a.SEC_IN_MINUTE, m % a.MINUTE_IN_HOUR, h % a.HOUR_IN_DAY, d);
         } 
         public static bool operator >=(Time a, Time b)
         {
@@ -158,7 +176,7 @@ namespace ShipsForm.Timers
 
         private void UpdateTimeFormat()
         {
-            TimeFormat = string.Format("{0:00}:{1:00}:{2:00}", Time.Hours, Time.Minutes, Time.Seconds);
+            TimeFormat = string.Format("{3} Days Time:{0:00}:{1:00}:{2:00}", Time.Hours, Time.Minutes, Time.Seconds, Time.Days);
             Console.WriteLine(TimeFormat);
         }
 

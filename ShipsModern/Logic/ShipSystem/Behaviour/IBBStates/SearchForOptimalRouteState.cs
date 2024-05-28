@@ -1,7 +1,10 @@
 ﻿
+using ShipsForm.Data;
+using ShipsForm.GUI;
 using ShipsForm.Logic.NodeSystem;
 using ShipsForm.Logic.ShipSystem.Behaviour.ShipStates;
 using System;
+using System.Linq;
 
 namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
 {
@@ -21,7 +24,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
                 ibb.Navigation.ChooseRoute(mn, ibb.Shell.IceResistLevel);
                 if (ibb.Navigation.ChosenRoute != null)
                 {
-                    ibb.Convoy.Controller.SetConvoyRoute(mn, ibb.Shell.IceResistLevel);                    
+                    ibb.Convoy.Controller.SetConvoyRoute(mn, ibb.Shell.IceResistLevel);
                     ibb.GoNextState();
                 }
             }
@@ -30,6 +33,7 @@ namespace ShipsForm.Logic.ShipSystem.Behaviour.IBBStates
         public override void OnExit(ShipBehavior sb)
         {
             Console.WriteLine($"Icebreaker-[id: {sb.Ship.Id}] ends searching route and set uped ships.");
+            Painter.UpdateCaravanShips?.Invoke((sb as IBBehavior).Convoy.ShipBehaviors.Where(x => x is not null).Select(x => x.Ship.Id).ToArray());
         }
     }
 }

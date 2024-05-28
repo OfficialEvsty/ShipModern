@@ -16,9 +16,9 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
             get
             {                
                 if (i_shipCounter > 0)
-                    return f_distanceBetweenS + f_shipImgLength / 2;
+                    return f_distanceBetweenS;
                 else
-                    return f_distanceBetweenIS + f_ibImgLength / 2;
+                    return f_distanceBetweenIS;
             } 
         }
 

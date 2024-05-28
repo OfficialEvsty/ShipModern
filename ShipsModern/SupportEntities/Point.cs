@@ -1,6 +1,9 @@
 ﻿
+using System;
+
 namespace ShipsForm.SupportEntities
 {
+    [Serializable]
     public class Point
     {
         public float X { get; }

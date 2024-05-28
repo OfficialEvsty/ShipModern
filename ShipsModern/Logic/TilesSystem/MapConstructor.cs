@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System;
 using System.Text;
+using ShipsModern.Logic.ShipSystem.ShipNavigation;
 
 namespace ShipsForm.Logic.TilesSystem
 {
@@ -26,6 +27,8 @@ namespace ShipsForm.Logic.TilesSystem
             try
             {
                 StreamReader sr = new StreamReader(s_mapFolderPath);
+                DateTime lastWriteTime = File.GetLastWriteTime(s_mapFolderPath);
+
                 while (!sr.EndOfStream)
                 {
                     string line = sr.ReadLine();
@@ -64,6 +67,7 @@ namespace ShipsForm.Logic.TilesSystem
         {
             try
             {
+                
                 ReadMap();
                 if (s_map.Count > 0)
                     return s_map;

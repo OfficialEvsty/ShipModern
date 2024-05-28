@@ -184,7 +184,10 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
             if (!IsContainInRoutesList(newRoute))
             {
                 m_availableRoutes.Add(newRoute);
-                m_availableRoutes.Add(Route.GetReversedRoute(newRoute));
+                RoutesPreloader.Save(newRoute);
+                var reversedRoute = Route.GetReversedRoute(newRoute);
+                m_availableRoutes.Add(reversedRoute);
+                RoutesPreloader.Save(reversedRoute);
             }
         }
 
@@ -192,6 +195,11 @@ namespace ShipsForm.Logic.ShipSystem.ShipNavigation
         {
             foreach(var route in routes)
                 AddRoute(route);
+        }
+
+        public static void AddOpenRoutes(Route[] routes)
+        {
+            m_availableRoutes.AddRange(routes);
         }
 
         public bool CheckRouteValid(List<Tile> route)

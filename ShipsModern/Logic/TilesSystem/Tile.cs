@@ -6,6 +6,7 @@ using System;
 
 namespace ShipsForm.Logic.TilesSystem
 {
+    [Serializable]
     public class Tile
     {
         public int X { get; set; }
@@ -38,7 +39,6 @@ namespace ShipsForm.Logic.TilesSystem
             return false;
         }
 
-        // Не забудьте также переопределить метод GetHashCode, чтобы он соответствовал реализации Equals
         public override int GetHashCode()
         {
             unchecked
@@ -82,6 +82,12 @@ namespace ShipsForm.Logic.TilesSystem
         public void SetParent(Tile tile)
         {
             Parent = tile;
+        }
+
+        public Tile GetSerializableTile()
+        {
+            return new Tile() { Category=this.Category, Cost=this.Cost, Distance=this.Distance, 
+                Parent=null, Passable = this.Passable, TileCost=this.TileCost, X=this.X, Y=this.Y};
         }
     }
 }

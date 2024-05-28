@@ -6,6 +6,9 @@ using ShipsForm.Timers;
 using ShipsForm.Logic;
 using ShipsForm.GUI;
 using System.Collections.Generic;
+using ShipsModern.Logic.ShipSystem.ShipNavigation;
+using System.IO;
+using System;
 
 namespace ShipsForm.Launching
 {
@@ -29,9 +32,13 @@ namespace ShipsForm.Launching
             m_manager = Manager.Init(painter);
 
             Node node1 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.8f, 0.56f), 5);
-            Node node2 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.2f, 0.1f), 8);
-            Node node3 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.1f, 0.2f), 2);
+            Node node2 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.2475f, 0.3f), 8);
+            Node node3 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.465f, 0.2f), 2);
             Node node4 = NetworkNodes.Network.AddNode(new SupportEntities.Point(0.75f, 0.65f), 2);
+
+            var s_mapFolderPath = Directory.GetCurrentDirectory() + "..\\..\\..\\..\\..\\Maps\\NSR.txt";
+            DateTime lastModifiedTime = File.GetLastAccessTime(s_mapFolderPath);
+            RoutesPreloader.Load(lastModifiedTime);
             //MarineNode marineNode1 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.1f, 0.1f));
             //MarineNode marineNode2 = NetworkNodes.Network.AddMarine(new SupportEntities.Point(0.1f, 0.12f));
             Dictionary<Cargo, int> requiredCargo = new Dictionary<Cargo, int>();

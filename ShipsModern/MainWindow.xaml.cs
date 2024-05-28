@@ -21,6 +21,8 @@ using ShipsForm.GUI.Elements;
 using System.Runtime.InteropServices;
 using ShipsModern.SupportEntities;
 using ShipsForm.Timers;
+using ShipsModern.Logic.ShipSystem.ShipNavigation;
+using System.IO;
 
 namespace ShipsModern
 {

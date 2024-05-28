@@ -1,6 +1,7 @@
 ﻿using ShipsForm.Logic.TilesSystem;
 using ShipsModern.Logic.NodeSystem.OptimalNodeHost;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace ShipsForm.Logic.NodeSystem
@@ -33,6 +34,16 @@ namespace ShipsForm.Logic.NodeSystem
             MarineNode mn = new MarineNode(tile);
             m_nodesNetwork.Add(mn);
             return mn;
+        }
+
+        public GeneralNode? GetGeneralNodeByTile(SupportEntities.Point p)
+        {
+            foreach (GeneralNode gn in m_nodesNetwork)
+            {
+                if(gn.TileCoords.X == p.X && gn.TileCoords.Y == p.Y)
+                    return gn;
+            }
+            return null;
         }
     }
 }

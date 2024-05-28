@@ -85,7 +85,7 @@ namespace ShipsForm.Logic.ShipSystem.IceBreakerSystem.ConvoySystem
                     if (data is null)
                         throw new Exception("Config file doesn't exist in context.");
                     int tick = data.TimeTickMS;
-                    int timeToPerform = (int)(interval / (avgSpeed * tick * data.MultiplyTimer));
+                    int timeToPerform = (int)(interval / (avgSpeed * tick));
                     var shipBehavior = m_convoy.m_shipBehaviors[index];
                     shipBehavior.Ship.Performer.AddPerformance(new Timers.Time(timeToPerform), ControlPassed, index);
                 }

@@ -54,6 +54,8 @@ namespace ShipsForm.GUI
 
         private Dictionary<int, IPathDrawable> m_paths = Manager.Paths;
 
+        public static Action<int[]>? UpdateCaravanShips;
+
         private bool IsUIElementOnCanvas(int id)
         {
             foreach (UIElement ui in m_canvas.Children)
@@ -128,7 +130,9 @@ namespace ShipsForm.GUI
             img.Source = m_wBitmap;
             m_canvas = modelCvas;
             m_field = field;
-            
+            UpdateCaravanShips += ClearUIs;
+
+
             if (m_field.Types is null)
                 throw new Exception();
             m_brushes = new SolidColorBrush[m_field.Types.Count];
@@ -246,12 +250,13 @@ namespace ShipsForm.GUI
                 }
             });
         }
+
         /// <summary>
         /// Checks inactive IDrawable and removes them.
         /// </summary>
         private void ControlActiveUIElements()
         {
-        int[] inactiveIDs;
+            int[] inactiveIDs;
             inactiveIDs = m_models.ToDictionary(entry => entry.Key, entry => entry.Value)
             .Where(x => x.Value.GetCurrentPoint() == null)
             .Select(x => x.Key)
@@ -260,7 +265,6 @@ namespace ShipsForm.GUI
             .Select(x => x.Key))
             .ToArray();
 
-            
 
             ClearUIs(inactiveIDs);
             i_activeUIIndexes = m_models.Where(x => !inactiveIDs.Any(y => y == x.Key)).Select(x => x.Key).Concat(m_paths.Where(x => !inactiveIDs.Any(y => y == x.Key)).Select(x => x.Key)).ToArray();
@@ -388,9 +392,13 @@ namespace ShipsForm.GUI
 
         public void DrawFrame()
         {
-            ControlActiveUIElements();
-            DrawModels();
-            DrawShipPaths();
+            try 
+            {
+                ControlActiveUIElements();
+                DrawModels();
+                DrawShipPaths();
+            } catch (Exception ex) { }
+            
         }
     }
 }

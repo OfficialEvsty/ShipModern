@@ -31,7 +31,7 @@
                 <Button Content="{StaticResource minusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Decrease_Scale"/>
                 <Button Content="{StaticResource plusIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="Increase_Scale"/>
                 <Button Content="{StaticResource draghIcon}" Width="25" Style="{StaticResource InvisibleBorder}" Click="PlayOrPause"/>
-                <Slider Name="controlTimeSlider" Minimum="1" Maximum="50000" Width="200" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0"></Slider>
+                <Slider Name="controlTimeSlider" Minimum="1" Maximum="100000" Width="200" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0"></Slider>
             </StackPanel>
         </Border>
     </Grid>
